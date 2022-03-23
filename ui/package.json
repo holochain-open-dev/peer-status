@@ -8,24 +8,16 @@
   "module": "dist/index.js",
   "exports": {
     ".": "./dist/index.js",
-    "./create-status": "./dist/definitions/create-status.js",
-    "./update-status": "./dist/definitions/update-status.js",
-    "./my-status": "./dist/definitions/my-status.js",
-    "./status-detail": "./dist/definitions/status-detail.js",
-    "./status-prompt": "./dist/definitions/status-prompt.js",
-    "./search-agent": "./dist/definitions/search-agent.js",
-    "./agent-avatar": "./dist/definitions/agent-avatar.js",
-    "./holo-identicon": "./dist/definitions/holo-identicon.js",
-    "./list-statuss": "./dist/definitions/list-statuss.js",
+    "./agent-status": "./dist/definitions/agent-status.js",
     "./mocks": "./dist/mocks.js"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "start": "npm run build && concurrently -k --names -k \"npm run build-watch\" \"web-dev-server --config web-dev-server.config.mjs\"",
+    "start": "concurrently \"npm run build-watch\" \"web-dev-server --config web-dev-server.config.mjs\"",
     "build": "rimraf dist && tsc",
-    "build-watch": "tsc --watch --preserveWatchOutput --incremental",
+    "build-watch": "run-singleton \"tsc --watch --preserveWatchOutput --incremental\"",
     "test": "npm run build && web-test-runner --coverage",
     "test-debug": "npm run build && DEBUG=true web-test-runner --coverage",
     "test-watch": "web-test-runner --watch",
@@ -37,19 +29,15 @@
     "publish-to-branch": "npm run lint && npm run build && rimraf node_modules && gh-pages -d ./ -b ui-build && cd .. && npm i"
   },
   "dependencies": {
-    "@holo-host/identicon": "^0.1.0",
     "@holochain-open-dev/cell-client": "^0.3.2",
     "@holochain/client": "^0.3.2",
     "@holochain-open-dev/core-types": "^0.2.0",
     "@holochain-open-dev/context": "^0.0.3",
     "@open-wc/scoped-elements": "^2.0.1",
-    "@scoped-elements/material-web": "0.0.16",
-    "@scoped-elements/shoelace": "0.0.8",
     "lit": "^2.1.1",
     "lit-svelte-stores": "^0.1.3",
     "lodash-es": "^4.17.21",
-    "svelte": "^3.42.4",
-    "@holochain-open-dev/profiles": "^0.0.8"
+    "svelte": "^3.42.4"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.5.7",

@@ -3,7 +3,7 @@ import { AgentPubKeyB64, serializeHash } from '@holochain-open-dev/core-types';
 import merge from 'lodash-es/merge';
 
 import { StatusService } from './status-service';
-import { writable, Writable, derived, Readable, get } from 'svelte/store';
+import { derived, Readable, readable } from 'svelte/store';
 import { defaultConfig, StatusConfig } from './config';
 
 /**
@@ -14,15 +14,23 @@ import { defaultConfig, StatusConfig } from './config';
  */
 
 export enum Status {
-  Online,
-  Idle,
-  Offline,
+  Online = 'online',
+  Idle = 'idle',
+  Offline = 'offline',
+}
+
+function lastSeenToStatus(now: number, lastSeen: number | undefined): Status {
+  if (lastSeen === undefined) return Status.Offline;
+
+  if (now - lastSeen < 5000) return Status.Online;
+  if (now - lastSeen < 20000) return Status.Idle;
+  return Status.Offline;
 }
 
 export class StatusStore {
   /** Private */
   private _service: StatusService;
-  private _statusStore: Record<AgentPubKeyB64, Writable<number | undefined>> =
+  private _statusStore: Record<AgentPubKeyB64, Readable<number | undefined>> =
     {};
 
   /** Static info */
@@ -30,16 +38,11 @@ export class StatusStore {
 
   /** Readable stores */
 
-  lastSeenToStatus(lastSeen: number | undefined): Status {
-    if (lastSeen === undefined) return Status.Offline;
-
-    const now = Date.now();
-    if (now - lastSeen < 5000) return Status.Online;
-    if (now - lastSeen < 20000) return Status.Idle;
-    return Status.Offline;
-  }
-
   config: StatusConfig;
+
+  intervalStore = readable(Date.now(), set => {
+    setInterval(() => set(Date.now()), 1000);
+  });
 
   constructor(
     protected cellClient: CellClient,
@@ -50,21 +53,10 @@ export class StatusStore {
     this.myAgentPubKey = serializeHash(cellClient.cellId[1]);
 
     setInterval(() => this.ping(), 2000);
-
-    cellClient.addSignalHandler(signal => {
-      const signalPayload = signal.data.payload;
-
-      if (signalPayload.type === 'Pong') {
-        this._statusStore[signalPayload.from_agent].set(Date.now());
-      }
-    });
+    this.ping();
   }
 
-  ping() {
-    for (const s of Object.values(this._statusStore)) {
-      s.update(p => p);
-    }
-
+  private ping() {
     const agentsWeAreSeeing = Object.keys(this._statusStore);
     if (agentsWeAreSeeing.length > 0) {
       this._service.ping(agentsWeAreSeeing);
@@ -75,11 +67,31 @@ export class StatusStore {
 
   subscribeToAgentStatus(agentPubKey: AgentPubKeyB64): Readable<Status> {
     if (!this._statusStore[agentPubKey]) {
-      this._statusStore[agentPubKey] = writable(undefined);
-    }
+      this._statusStore[agentPubKey] = readable<undefined | number>(
+        undefined,
+        set => {
+          const { unsubscribe } = this.cellClient.addSignalHandler(signal => {
+            const signalPayload = signal.data.payload;
 
-    return derived(this._statusStore[agentPubKey], lastSeenTimestamp =>
-      this.lastSeenToStatus(lastSeenTimestamp)
+            if (
+              signalPayload.type === 'Pong' &&
+              signalPayload.from_agent === agentPubKey
+            ) {
+              set(Date.now());
+            }
+          });
+          return () => {
+            delete this._statusStore[agentPubKey];
+            unsubscribe();
+          };
+        }
+      );
+    }
+    this.ping();
+
+    return derived(
+      [this.intervalStore, this._statusStore[agentPubKey]],
+      ([now, lastSeenTimestamp]) => lastSeenToStatus(now, lastSeenTimestamp)
     );
   }
 }

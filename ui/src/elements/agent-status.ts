@@ -1,12 +1,12 @@
 import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 import { contextProvided } from '@holochain-open-dev/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
+import { StoreSubscriber } from 'lit-svelte-stores';
 import { css, html, LitElement } from 'lit';
+
 import { property } from 'lit/decorators.js';
 import { statusStoreContext } from '../context';
-import { StatusStore, Status } from '../status-store';
-import { SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
-import { StoreSubscriber } from 'lit-svelte-stores';
+import { StatusStore } from '../status-store';
 import { sharedStyles } from './utils/shared-styles';
 
 export class AgentStatus extends ScopedElementsMixin(LitElement) {
@@ -35,33 +35,37 @@ export class AgentStatus extends ScopedElementsMixin(LitElement) {
     this.store.subscribeToAgentStatus(this.agentPubKey)
   );
 
-  renderStatusColor() {
-    switch (this._status.value) {
-      case Status.Online:
-        return 'green';
-      case Status.Idle:
-        return 'yellow';
-      default:
-        return 'grey';
-    }
-  }
-
   render() {
-    return html`<div
-      class="status"
-      style="background-color: ${this.renderStatusColor()}"
-    ></div>`;
+    return html`<div class=${this._status.value}></div>`;
   }
 
   static styles = [
     sharedStyles,
     css`
-      .status {
-        height: 8px;
-        width: 8px;
+      .online,
+      .idle,
+      .offline {
         border-radius: 50%;
-        border-color: black;
-        border-width: 1px;
+      }
+
+      .online,
+      .idle {
+        height: 16px;
+        width: 16px;
+      }
+
+      .online {
+        background-color: #00ef00;
+      }
+
+      .idle {
+        background-color: #dfc800;
+      }
+
+      .offline {
+        height: 6px;
+        width: 6px;
+        border: 5px solid #7c7c7c;
       }
     `,
   ];
