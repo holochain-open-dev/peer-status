@@ -1,0 +1,15 @@
+---
+manifest_version: "1"
+name: status-test
+description: ~
+roles:
+  - id: status
+    provisioning:
+      strategy: create
+      deferred: false
+    dna:
+      bundled: "../dna/status-test.dna"
+      properties: ~
+      uuid: ~
+      version: ~
+      clone_limit: 0
