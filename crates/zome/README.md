@@ -1,4 +1,4 @@
-# hc_zome_statuss
+# hc_zome_peer_status
 
 Status zome for any Holochain app.
 

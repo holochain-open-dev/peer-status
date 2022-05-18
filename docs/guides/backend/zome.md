@@ -1,4 +1,4 @@
-# Backend Docs >> hc_zome_statuss ||10
+# Backend Docs >> hc_zome_peer_status ||10
 
 Use this crate directly if you want include and maybe extend this zome in your DNA.
 
@@ -6,4 +6,4 @@ Notice that just by importing this crate, all its zome functions will be automat
 
 Read the documentation for the zome functions available from this zome:
 
-- https://docs.rs/hc_zome_statuss
+- https://docs.rs/hc_zome_peer_status

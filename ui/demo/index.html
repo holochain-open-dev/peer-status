@@ -25,7 +25,7 @@
         profilesStoreContext,
       } from '@holochain-open-dev/profiles';
 
-      import { AgentStatus, StatusStore, statusStoreContext } from '../dist';
+      import { PeerStatus, PeerStatusStore, peerStatusStoreContext } from '../dist';
       import { get } from 'svelte/store';
 
       import { ContextProvider } from '@holochain-open-dev/context';
@@ -57,8 +57,8 @@
 
           new ContextProvider(
             this,
-            statusStoreContext,
-            new StatusStore(cellClient)
+            peerStatusStoreContext,
+            new PeerStatusStore(cellClient)
           );
           this.loaded = true;
 
@@ -76,9 +76,9 @@
             <profile-prompt>
               ${this.agentPubKey
                 ? html`
-                    <agent-status
+                    <peer-status
                       .agentPubKey=${this.agentPubKey}
-                    ></agent-status>
+                    ></peer-status>
                   `
                 : html``}
             </profile-prompt>
@@ -88,7 +88,7 @@
         static get scopedElements() {
           return {
             'profile-prompt': ProfilePrompt,
-            'agent-status': AgentStatus,
+            'peer-status': PeerStatus,
           };
         }
       }

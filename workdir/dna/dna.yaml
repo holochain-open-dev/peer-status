@@ -4,8 +4,8 @@ name: status-test
 uuid: 00000000-0000-0000-0000-000000000000
 properties: ~
 zomes:
-  - name: status
-    bundled: ../../target/wasm32-unknown-unknown/release/hc_zome_statuss.wasm
+  - name: peer_status
+    bundled: ../../target/wasm32-unknown-unknown/release/hc_zome_peer_status.wasm
 
   - name: profiles
     bundled: ../../target/wasm32-unknown-unknown/release/profiles.wasm

@@ -1,14 +1,14 @@
 {
-  "name": "@holochain-open-dev/status",
-  "version": "0.0.8",
-  "description": "Frontend module for the Holochain hc_zome_statuss zome",
+  "name": "@holochain-open-dev/peer-status",
+  "version": "0.0.1",
+  "description": "Frontend module for the Holochain hc_zome_peer_status zome",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "exports": {
     ".": "./dist/index.js",
-    "./agent-status": "./dist/definitions/agent-status.js",
+    "./peer-status": "./dist/definitions/peer-status.js",
     "./mocks": "./dist/mocks.js"
   },
   "files": [
@@ -29,7 +29,7 @@
     "publish-to-branch": "npm run lint && npm run build && rimraf node_modules && gh-pages -d ./ -b ui-build && cd .. && npm i"
   },
   "dependencies": {
-    "@holochain-open-dev/cell-client": "^0.3.2",
+    "@holochain-open-dev/cell-client": "^0.3.5",
     "@holochain/client": "^0.3.2",
     "@holochain-open-dev/core-types": "^0.2.0",
     "@holochain-open-dev/context": "^0.0.3",

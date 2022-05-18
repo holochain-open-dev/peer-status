@@ -5,7 +5,7 @@
 
 ```toml
 [dependencies]
-hc_zome_statuss = {git = "https://github.com/holochain-open-dev/status", rev = "for-hc-v0.0.124", package = "hc_zome_statuss"}
+hc_zome_peer_status = {git = "https://github.com/holochain-open-dev/status", rev = "for-hc-v0.0.124", package = "hc_zome_peer_status"}
 ```
 
 Replace the `rev` field with the holochain version you are using. See [which tags are available](https://github.com/holochain-open-dev/status/tags).
@@ -13,7 +13,7 @@ Replace the `rev` field with the holochain version you are using. See [which tag
 3.  Replace the contents of the `lib.rs` with this content:
 
 ```rust
-extern crate hc_zome_statuss;
+extern crate hc_zome_peer_status;
 ```
 
 4. Add this new crate to your top level `Cargo.toml`.

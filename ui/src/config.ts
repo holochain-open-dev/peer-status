@@ -1,13 +1,7 @@
-export interface StatusConfig {
+export interface PeerStatusConfig {
   zomeName: string;
-  avatarMode: 'identicon' | 'avatar';
-  additionalFields: string[];
-  minNicknameLength: number;
 }
 
-export const defaultConfig: StatusConfig = {
-  zomeName: 'status',
-  avatarMode: 'avatar',
-  additionalFields: [],
-  minNicknameLength: 3,
+export const defaultConfig: PeerStatusConfig = {
+  zomeName: 'peer_status',
 };

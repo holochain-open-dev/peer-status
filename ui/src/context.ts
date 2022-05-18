@@ -1,6 +1,6 @@
 import { Context, createContext } from '@holochain-open-dev/context';
-import { StatusStore } from './status-store';
+import { PeerStatusStore } from './peer-status-store';
 
-export const statusStoreContext: Context<StatusStore> = createContext(
-  'hc_zome_statuss/store'
+export const peerStatusStoreContext: Context<PeerStatusStore> = createContext(
+  'hc_zome_peer_status/store'
 );

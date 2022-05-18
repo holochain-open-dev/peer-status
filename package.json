@@ -8,9 +8,9 @@
   "scripts": {
     "start": "npm run build:happ && npm run start:agent",
     "network": "npm run build:happ && concurrently-repeat \"npm run start:agent\"",
-    "start:agent": "cross-env HC_PORT=$(port) concurrently \"npm run playground\" \"npm run start:happ\" \"npm run start -w @holochain-open-dev/status\"",
+    "start:agent": "cross-env HC_PORT=$(port) concurrently \"npm run playground\" \"npm run start:happ\" \"npm run start -w @holochain-open-dev/peer-status\"",
     "test": "npm run build:happ && npm t -w @holochain-open-dev/status-test",
-    "start:happ": "RUST_LOG=warn hc s generate ./workdir/happ/status-test.happ --run=$HC_PORT network  --bootstrap https://bootstrap-staging.holo.host/ quic",
+    "start:happ": "RUST_LOG=warn hc s generate ./workdir/happ/status-test.happ --run=$HC_PORT network  mdns",
     "build:happ": "npm run build:dna && hc app pack workdir/happ",
     "build:dna": "npm run build:zome && hc dna pack workdir/dna",
     "build:zome": "CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown",

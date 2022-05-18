@@ -2,9 +2,9 @@ import { CellClient } from '@holochain-open-dev/cell-client';
 import { AgentPubKeyB64, serializeHash } from '@holochain-open-dev/core-types';
 import merge from 'lodash-es/merge';
 
-import { StatusService } from './status-service';
+import { PeerStatusService } from './peer-status-service';
 import { derived, Readable, readable } from 'svelte/store';
-import { defaultConfig, StatusConfig } from './config';
+import { defaultConfig, PeerStatusConfig } from './config';
 
 /**
  * {
@@ -27,9 +27,9 @@ function lastSeenToStatus(now: number, lastSeen: number | undefined): Status {
   return Status.Offline;
 }
 
-export class StatusStore {
+export class PeerStatusStore {
   /** Private */
-  private _service: StatusService;
+  private _service: PeerStatusService;
   private _statusStore: Record<AgentPubKeyB64, Readable<number | undefined>> =
     {};
 
@@ -38,7 +38,7 @@ export class StatusStore {
 
   /** Readable stores */
 
-  config: StatusConfig;
+  config: PeerStatusConfig;
 
   intervalStore = readable(Date.now(), set => {
     setInterval(() => set(Date.now()), 1000);
@@ -46,10 +46,10 @@ export class StatusStore {
 
   constructor(
     protected cellClient: CellClient,
-    config: Partial<StatusConfig> = {}
+    config: Partial<PeerStatusConfig> = {}
   ) {
     this.config = merge(defaultConfig, config);
-    this._service = new StatusService(cellClient, this.config.zomeName);
+    this._service = new PeerStatusService(cellClient, this.config.zomeName);
     this.myAgentPubKey = serializeHash(cellClient.cellId[1]);
 
     setInterval(() => this.ping(), 2000);

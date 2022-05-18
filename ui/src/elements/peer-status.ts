@@ -5,11 +5,11 @@ import { StoreSubscriber } from 'lit-svelte-stores';
 import { css, html, LitElement } from 'lit';
 
 import { property } from 'lit/decorators.js';
-import { statusStoreContext } from '../context';
-import { StatusStore } from '../status-store';
+import { peerStatusStoreContext } from '../context';
+import { PeerStatusStore } from '../peer-status-store';
 import { sharedStyles } from './utils/shared-styles';
 
-export class AgentStatus extends ScopedElementsMixin(LitElement) {
+export class PeerStatus extends ScopedElementsMixin(LitElement) {
   /** Public properties */
 
   /**
@@ -27,9 +27,9 @@ export class AgentStatus extends ScopedElementsMixin(LitElement) {
    * `PresenceStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: statusStoreContext })
+  @contextProvided({ context: peerStatusStoreContext })
   @property({ type: Object })
-  store!: StatusStore;
+  store!: PeerStatusStore;
 
   private _status = new StoreSubscriber(this, () =>
     this.store.subscribeToAgentStatus(this.agentPubKey)

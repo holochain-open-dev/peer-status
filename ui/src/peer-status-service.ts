@@ -1,7 +1,7 @@
 import { CellClient } from '@holochain-open-dev/cell-client';
 import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 
-export class StatusService {
+export class PeerStatusService {
   constructor(public cellClient: CellClient, public zomeName = 'status') {}
 
   /**
