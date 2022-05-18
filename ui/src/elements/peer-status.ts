@@ -1,5 +1,5 @@
 import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
-import { contextProvided } from '@holochain-open-dev/context';
+import { contextProvided } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { css, html, LitElement } from 'lit';
@@ -24,10 +24,10 @@ export class PeerStatus extends ScopedElementsMixin(LitElement) {
   /** Dependencies */
 
   /**
-   * `PresenceStore` that is requested via context.
+   * `PeerStatusStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: peerStatusStoreContext })
+  @contextProvided({ context: peerStatusStoreContext, subscribe: true })
   @property({ type: Object })
   store!: PeerStatusStore;
 

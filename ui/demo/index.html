@@ -25,10 +25,14 @@
         profilesStoreContext,
       } from '@holochain-open-dev/profiles';
 
-      import { PeerStatus, PeerStatusStore, peerStatusStoreContext } from '../dist';
+      import {
+        PeerStatus,
+        PeerStatusStore,
+        peerStatusStoreContext,
+      } from '../dist';
       import { get } from 'svelte/store';
 
-      import { ContextProvider } from '@holochain-open-dev/context';
+      import { ContextProvider } from '@lit-labs/context';
       import { HolochainClient } from '@holochain-open-dev/cell-client';
       import { ScopedElementsMixin } from '@open-wc/scoped-elements';
       import { LitElement, html } from 'lit';
@@ -62,8 +66,7 @@
           );
           this.loaded = true;
 
-          await profilesStore.fetchAllProfiles();
-          const allProfiles = get(profilesStore.knownProfiles);
+          const allProfiles = get(await profilesStore.fetchAllProfiles());
           console.log(allProfiles);
           this.agentPubKey = Object.keys(allProfiles).filter(
             pubkey => profilesStore.myAgentPubKey !== pubkey
@@ -76,9 +79,7 @@
             <profile-prompt>
               ${this.agentPubKey
                 ? html`
-                    <peer-status
-                      .agentPubKey=${this.agentPubKey}
-                    ></peer-status>
+                    <peer-status .agentPubKey=${this.agentPubKey}></peer-status>
                   `
                 : html``}
             </profile-prompt>
