@@ -32,7 +32,7 @@ export class PeerStatus extends ScopedElementsMixin(LitElement) {
   store!: PeerStatusStore;
 
   private _status = new StoreSubscriber(this, () =>
-    this.store.subscribeToAgentStatus(this.agentPubKey)
+    this.store?.subscribeToAgentStatus(this.agentPubKey)
   );
 
   render() {
