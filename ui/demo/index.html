@@ -21,6 +21,7 @@
     <script type="module">
       import {
         ProfilesStore,
+        ProfilesService,
         ProfilePrompt,
         profilesStoreContext,
       } from '@holochain-open-dev/profiles';
@@ -29,11 +30,14 @@
         PeerStatus,
         PeerStatusStore,
         peerStatusStoreContext,
+        AvatarWithStatus,
+        ListAgentsByStatus
       } from '../dist';
       import { get } from 'svelte/store';
 
+      import { AppWebsocket } from '@holochain/client'
       import { ContextProvider } from '@lit-labs/context';
-      import { HolochainClient } from '@holochain-open-dev/cell-client';
+      import { HolochainClient, CellClient } from '@holochain-open-dev/cell-client';
       import { ScopedElementsMixin } from '@open-wc/scoped-elements';
       import { LitElement, html } from 'lit';
 
@@ -50,13 +54,19 @@
         }
 
         async firstUpdated() {
-          const client = await HolochainClient.connect(
-            `ws://localhost:${process.env.HC_PORT}`,
-            'test-app'
-          );
-          const cellClient = client.forCell(client.cellDataByRoleId('status'));
+          const appWs = await AppWebsocket.connect(`ws://localhost:${process.env.HC_PORT}`);
 
-          const profilesStore = new ProfilesStore(cellClient);
+          const client = new HolochainClient(appWs);
+
+          const appInfo = await appWs.appInfo({
+            installed_app_id: 'test-app'
+          })
+          const cell = appInfo.cell_data.find(c => c.role_id === 'status');
+          console.log(appInfo, cell)
+
+          const cellClient = new CellClient(client, cell);
+
+          const profilesStore = new ProfilesStore(new ProfilesService(cellClient));
           new ContextProvider(this, profilesStoreContext, profilesStore);
 
           new ContextProvider(
@@ -79,6 +89,8 @@
             <profile-prompt>
               ${this.agentPubKey
                 ? html`
+                    <list-agents-by-status .agents=${[this.agentPubKey]}></list-agents-by-status>
+                    <avatar-with-status .agentPubKey=${this.agentPubKey}></avatar-with-status>
                     <peer-status .agentPubKey=${this.agentPubKey}></peer-status>
                   `
                 : html``}
@@ -90,6 +102,8 @@
           return {
             'profile-prompt': ProfilePrompt,
             'peer-status': PeerStatus,
+            'avatar-with-status': AvatarWithStatus,
+            'list-agents-by-status': ListAgentsByStatus
           };
         }
       }

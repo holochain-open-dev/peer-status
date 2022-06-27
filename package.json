@@ -6,8 +6,8 @@
     "tests"
   ],
   "scripts": {
-    "start": "npm run build:happ && npm run start:agent",
-    "network": "npm run build:happ && concurrently-repeat \"npm run start:agent\"",
+    "start": "npm run network 2",
+    "network": "hc s clean && npm run build:happ && concurrently-repeat \"npm run start:agent\"",
     "start:agent": "cross-env HC_PORT=$(port) concurrently \"npm run playground\" \"npm run start:happ\" \"npm run start -w @holochain-open-dev/peer-status\"",
     "test": "npm run build:happ && npm t -w @holochain-open-dev/status-test",
     "start:happ": "RUST_LOG=warn hc s generate ./workdir/happ/status-test.happ --run=$HC_PORT network mdns",
@@ -33,7 +33,7 @@
     "cross-env": "^7.0.3",
     "gh-pages": "^3.2.3",
     "new-port-cli": "^1.0.0",
-    "run-singleton-cli": "^0.0.5"
+    "run-singleton-cli": "^0.0.7"
   },
   "type": "module"
 }

@@ -50,7 +50,7 @@ export class PeerStatusStore {
   ) {
     this.config = merge(defaultConfig, config);
     this._service = new PeerStatusService(cellClient, this.config.zomeName);
-    this.myAgentPubKey = serializeHash(cellClient.cellId[1]);
+    this.myAgentPubKey = serializeHash(cellClient.cell.cell_id[1]);
 
     setInterval(() => this.ping(), 2000);
     this.ping();
@@ -64,6 +64,25 @@ export class PeerStatusStore {
   }
 
   /** Actions */
+
+  subscribeToAgentsStatuses(
+    agentPubKey: AgentPubKeyB64[]
+  ): Readable<Record<AgentPubKeyB64, Status>> {
+    const stores = agentPubKey.map(a =>
+      derived(
+        [this.subscribeToAgentStatus(a)],
+        s => [a, s[0]] as [AgentPubKeyB64, Status]
+      )
+    );
+    return derived(
+      stores,
+      agentsArray =>
+        agentsArray.reduce(
+          (acc, next) => ({ ...acc, [next[0]]: next[1] }),
+          {}
+        ) as Record<AgentPubKeyB64, Status>
+    );
+  }
 
   subscribeToAgentStatus(agentPubKey: AgentPubKeyB64): Readable<Status> {
     if (!this._statusStore[agentPubKey]) {

@@ -32,16 +32,24 @@ export class PeerStatus extends ScopedElementsMixin(LitElement) {
   store!: PeerStatusStore;
 
   private _status = new StoreSubscriber(this, () =>
-    this.store?.subscribeToAgentStatus(this.agentPubKey)
+    this.store.subscribeToAgentStatus(this.agentPubKey)
   );
 
   render() {
-    return html`<div class=${this._status.value}></div>`;
+    return html`<div class="outer"><div class=${this._status.value}></div></div>`;
   }
 
   static styles = [
     sharedStyles,
     css`
+      .outer {
+        position: relative;
+        height: 15px;
+        width: 15px;
+        background-color: #666666;
+      }
+
+      .outer,
       .online,
       .idle,
       .offline {
@@ -50,8 +58,11 @@ export class PeerStatus extends ScopedElementsMixin(LitElement) {
 
       .online,
       .idle {
-        height: 16px;
-        width: 16px;
+        top: 2px;
+        left: 2px;
+        position: absolute;
+        height: 11px;
+        width: 11px;
       }
 
       .online {
@@ -59,13 +70,17 @@ export class PeerStatus extends ScopedElementsMixin(LitElement) {
       }
 
       .idle {
-        background-color: #dfc800;
+        background-color: #df8600;
       }
 
       .offline {
-        height: 6px;
-        width: 6px;
-        border: 5px solid #7c7c7c;
+        top: 2px;
+        left: 2px;
+        position: relative;
+        height: 5px;
+        width: 5px;
+        background-color: #666666;
+        border: 3px solid #a7a7a7;
       }
     `,
   ];

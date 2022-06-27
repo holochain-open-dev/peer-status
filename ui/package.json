@@ -9,6 +9,8 @@
   "exports": {
     ".": "./dist/index.js",
     "./peer-status": "./dist/definitions/peer-status.js",
+    "./avatar-with-status": "./dist/definitions/avatar-with-status.js",
+    "./list-agents-by-status": "./dist/definitions/list-agents-by-status.js",
     "./peer-status-context": "./dist/definitions/peer-status-context.js",
     "./mocks": "./dist/mocks.js"
   },
@@ -30,19 +32,21 @@
     "publish-to-branch": "npm run lint && npm run build && rimraf node_modules && gh-pages -d ./ -b ui-build && cd .. && npm i"
   },
   "dependencies": {
-    "@holochain-open-dev/cell-client": "^0.3.5",
+    "@holochain-open-dev/cell-client": "^0.5.3",
     "@holochain-open-dev/core-types": "^0.2.0",
+    "@holochain-open-dev/profiles": "^0.3.4",
     "@holochain/client": "^0.4.1",
     "@lit-labs/context": "^0.1.1",
     "@open-wc/scoped-elements": "^2.0.1",
+    "@scoped-elements/material-web": "^0.0.19",
+    "@scoped-elements/shoelace": "^0.0.8",
     "lit": "^2.1.1",
-    "lit-svelte-stores": "^0.1.3",
+    "lit-svelte-stores": "^0.2.0",
     "lodash-es": "^4.17.21",
     "svelte": "^3.42.4"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.5.7",
-    "@holochain-open-dev/profiles": "^0.1.0",
     "@mdjs/mdjs-preview": "^0.5.6",
     "@open-wc/eslint-config": "^2.0.0",
     "@open-wc/testing": "^3.0.0-next.5",
