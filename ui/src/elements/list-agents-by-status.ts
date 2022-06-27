@@ -69,7 +69,7 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
     agentPubKeys: AgentPubKeyB64[]
   ) {
     if (agentPubKeys.length === 0)
-      return html`<span class="placeholder" style="text-align: center;">There are no agents online</span>`;
+      return html`<span class="placeholder" style="text-align: center; padding: 16px;">There are no agents online</span>`;
 
     return html`
     <mwc-list style="flex: 1;">
@@ -89,10 +89,10 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
     agentPubKeys: AgentPubKeyB64[]
   ) {
     if (agentPubKeys.length === 0)
-      return html`<span class="placeholder" style="text-align: center;">There are no agents offline</span>`;
+      return html`<span class="placeholder" style="text-align: center; padding: 16px;">There are no agents offline</span>`;
 
     return html`
-    <mwc-list style="flex: 1;">
+    <mwc-list style="flex: 1; opacity: 0.5;">
      
     ${agentPubKeys.map(
       agentPubKey => html`
@@ -125,12 +125,11 @@ ${this._allProfilesTask.render({
         ? ` - ${this._offlineAgents.value.length}`
         : ''
     }</span>
-    <div style="opacity: 0.5;">
 ${this._allProfilesTask.render({
   complete: profiles =>
     this.renderOfflineAgents(profiles, this._offlineAgents.value),
   pending: () => Array(3).map(() => html`<sl-skeleton></sl-skeleton>`),
-})}</div>
+})}
 
       </div>
     `;
