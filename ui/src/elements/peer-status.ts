@@ -1,4 +1,3 @@
-import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 import { contextProvided } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { StoreSubscriber } from 'lit-svelte-stores';
@@ -8,6 +7,7 @@ import { property } from 'lit/decorators.js';
 import { peerStatusStoreContext } from '../context';
 import { PeerStatusStore } from '../peer-status-store';
 import { sharedStyles } from './utils/shared-styles';
+import { AgentPubKey } from '@holochain/client';
 
 export class PeerStatus extends ScopedElementsMixin(LitElement) {
   /** Public properties */
@@ -17,9 +17,9 @@ export class PeerStatus extends ScopedElementsMixin(LitElement) {
    */
   @property({
     attribute: 'agent-pub-key',
-    type: String,
+    type: Object,
   })
-  agentPubKey!: AgentPubKeyB64;
+  agentPubKey!: AgentPubKey;
 
   /** Dependencies */
 

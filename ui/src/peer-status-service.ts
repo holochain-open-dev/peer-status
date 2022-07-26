@@ -1,13 +1,12 @@
 import { CellClient } from '@holochain-open-dev/cell-client';
-import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
-
+import { AgentPubKey } from '@holochain/client';
 export class PeerStatusService {
   constructor(public cellClient: CellClient, public zomeName = 'status') {}
 
   /**
    * Ping all given agents, waiting for their pong
    */
-  async ping(agentPubKeys: AgentPubKeyB64[]): Promise<void> {
+  async ping(agentPubKeys: AgentPubKey[]): Promise<void> {
     return this.callZome('ping', agentPubKeys);
   }
 

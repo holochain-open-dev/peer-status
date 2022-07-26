@@ -5,16 +5,18 @@ documentation = "https://holochain-open-dev.github.io/peer-status"
 edition = "2021"
 homepage = "https://docs.rs/hc_zome_peer_status"
 license = "MIT"
-name = "hc_zome_peer_status"
+name = "hc_zome_peer_status_coordinator"
 repository = "https://github.com/holochain-open-dev/peer-status"
 version = "0.0.1"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-name = "hc_zome_peer_status"
+name = "hc_zome_peer_status_coordinator"
 
 [dependencies]
 derive_more = "0"
 serde = "1"
 
-hdk = {version = "0.0.136", features = ["encoding"]}
+hc_zome_peer_status_integrity = { path= "../../integrity_zomes/peer_status"}
+
+hdk = {version = "0.0.142", features = ["encoding"]}

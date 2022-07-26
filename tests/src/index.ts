@@ -28,7 +28,7 @@ function serializeHash(hash) {
   return `u${Base64.fromUint8Array(hash, true)}`;
 }
 
-const zomeName = 'status';
+const zomeName = 'peer_status';
 
 let orchestrator = new Orchestrator();
 

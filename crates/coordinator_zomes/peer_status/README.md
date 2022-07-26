@@ -1,6 +1,6 @@
 # hc_zome_peer_status
 
-Status zome for any Holochain app.
+Status coordinator zome for any Holochain app.
 
 ## Documentation
 

@@ -1,5 +1,6 @@
 import { CellClient } from '@holochain-open-dev/cell-client';
-import { AgentPubKeyB64, serializeHash } from '@holochain-open-dev/core-types';
+import { HoloHashMap } from '@holochain-open-dev/utils';
+import { AgentPubKey, HoloHash } from '@holochain/client';
 import merge from 'lodash-es/merge';
 
 import { PeerStatusService } from './peer-status-service';
@@ -30,11 +31,11 @@ function lastSeenToStatus(now: number, lastSeen: number | undefined): Status {
 export class PeerStatusStore {
   /** Private */
   private _service: PeerStatusService;
-  private _statusStore: Record<AgentPubKeyB64, Readable<number | undefined>> =
-    {};
+  private _statusStore: HoloHashMap<Readable<number | undefined>> =
+    new HoloHashMap();
 
   /** Static info */
-  public myAgentPubKey: AgentPubKeyB64;
+  public myAgentPubKey: AgentPubKey;
 
   /** Readable stores */
 
@@ -50,14 +51,14 @@ export class PeerStatusStore {
   ) {
     this.config = merge(defaultConfig, config);
     this._service = new PeerStatusService(cellClient, this.config.zomeName);
-    this.myAgentPubKey = serializeHash(cellClient.cell.cell_id[1]);
+    this.myAgentPubKey = cellClient.cell.cell_id[1];
 
     setInterval(() => this.ping(), 2000);
     this.ping();
   }
 
   private ping() {
-    const agentsWeAreSeeing = Object.keys(this._statusStore);
+    const agentsWeAreSeeing = this._statusStore.keys();
     if (agentsWeAreSeeing.length > 0) {
       this._service.ping(agentsWeAreSeeing);
     }
@@ -66,27 +67,29 @@ export class PeerStatusStore {
   /** Actions */
 
   subscribeToAgentsStatuses(
-    agentPubKey: AgentPubKeyB64[]
-  ): Readable<Record<AgentPubKeyB64, Status>> {
-    const stores = agentPubKey.map(a =>
+    agentPubKeys: AgentPubKey[]
+  ): Readable<HoloHashMap<Status>> {
+    const stores = agentPubKeys.map(a =>
       derived(
         [this.subscribeToAgentStatus(a)],
-        s => [a, s[0]] as [AgentPubKeyB64, Status]
+        s => [a, s[0]] as [AgentPubKey, Status]
       )
     );
     return derived(
       stores,
-      agentsArray =>
-        agentsArray.reduce(
-          (acc, next) => ({ ...acc, [next[0]]: next[1] }),
-          {}
-        ) as Record<AgentPubKeyB64, Status>
+      (agentsArray) => {
+        const holoHashMap: HoloHashMap<Status> = new HoloHashMap();
+        agentsArray.forEach(([key, value]) => {
+          holoHashMap.put(key, value);
+        });
+        return holoHashMap;
+      }
     );
   }
 
-  subscribeToAgentStatus(agentPubKey: AgentPubKeyB64): Readable<Status> {
-    if (!this._statusStore[agentPubKey]) {
-      this._statusStore[agentPubKey] = readable<undefined | number>(
+  subscribeToAgentStatus(agentPubKey: AgentPubKey): Readable<Status> {
+    if (!this._statusStore.get(agentPubKey)) {
+      this._statusStore.put(agentPubKey, readable<undefined | number>(
         undefined,
         set => {
           const { unsubscribe } = this.cellClient.addSignalHandler(signal => {
@@ -100,16 +103,16 @@ export class PeerStatusStore {
             }
           });
           return () => {
-            delete this._statusStore[agentPubKey];
+            this._statusStore.delete(agentPubKey);
             unsubscribe();
           };
         }
-      );
+      ));
     }
     this.ping();
 
     return derived(
-      [this.intervalStore, this._statusStore[agentPubKey]],
+      [this.intervalStore, this._statusStore.get(agentPubKey)],
       ([now, lastSeenTimestamp]) => lastSeenToStatus(now, lastSeenTimestamp)
     );
   }

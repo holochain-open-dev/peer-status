@@ -1,4 +1,3 @@
-import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { css, html, LitElement } from 'lit';
 import {
@@ -18,6 +17,8 @@ import { peerStatusStoreContext } from '../context';
 import { StoreSubscriber, TaskSubscriber } from 'lit-svelte-stores';
 import { derived } from 'svelte/store';
 import { AvatarWithStatus } from './avatar-with-status';
+import { AgentPubKey } from '@holochain/client';
+import { HoloHashMap } from '@holochain-open-dev/utils';
 
 export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
   /** Public properties */
@@ -26,9 +27,9 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
    * REQUIRED. The public keys identifying the agents whose presence is going to be shown.
    */
   @property({
-    type: Object,
+    type: Array,
   })
-  agents!: AgentPubKeyB64[];
+  agents!: AgentPubKey[];
 
   /**
    * `PeerStatusStore` that is requested via context.
@@ -50,7 +51,7 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
 
   private _onlineAgents = new StoreSubscriber(this, () =>
     derived([this.store.subscribeToAgentsStatuses(this.agents)], ([agents]) =>
-      Object.entries(agents)
+      agents.entries()
         .filter(([pubKey, status]) => status !== Status.Offline)
         .map(([pubKey, _]) => pubKey)
     )
@@ -58,47 +59,47 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
 
   private _offlineAgents = new StoreSubscriber(this, () =>
     derived([this.store.subscribeToAgentsStatuses(this.agents)], ([agents]) =>
-      Object.entries(agents)
+      agents.entries()
         .filter(([pubKey, status]) => status === Status.Offline)
         .map(([pubKey, _]) => pubKey)
     )
   );
 
   renderOnlineAgents(
-    profiles: Record<AgentPubKeyB64, Profile | undefined>,
-    agentPubKeys: AgentPubKeyB64[]
+    profiles: HoloHashMap<Profile | undefined>,
+    agentPubKeys: AgentPubKey[]
   ) {
     if (agentPubKeys.length === 0)
       return html`<span class="placeholder" style="text-align: center; padding: 16px;">There are no agents online</span>`;
 
     return html`
     <mwc-list style="flex: 1;">
-     
+
     ${agentPubKeys.map(
       agentPubKey => html`
     <mwc-list-item graphic="avatar" noninteractive >
       <avatar-with-status slot="graphic"  .agentPubKey=${agentPubKey}></avatar-with-status>
-      <span>${profiles[agentPubKey]?.nickname}</span>
+      <span>${profiles.get(agentPubKey)?.nickname}</span>
     </mwc-list-item>`
     )}
     </mwc-list>
     `;
   }
   renderOfflineAgents(
-    profiles: Record<AgentPubKeyB64, Profile | undefined>,
-    agentPubKeys: AgentPubKeyB64[]
+    profiles: HoloHashMap<Profile | undefined>,
+    agentPubKeys: AgentPubKey[]
   ) {
     if (agentPubKeys.length === 0)
       return html`<span class="placeholder" style="text-align: center; padding: 16px;">There are no agents offline</span>`;
 
     return html`
     <mwc-list style="flex: 1; opacity: 0.5;">
-     
+
     ${agentPubKeys.map(
       agentPubKey => html`
     <mwc-list-item graphic="avatar" noninteractive >
       <agent-avatar slot="graphic"  .agentPubKey=${agentPubKey}></agent-avatar>
-      <span>${profiles[agentPubKey]?.nickname}</span>
+      <span>${profiles.get(agentPubKey)?.nickname}</span>
     </mwc-list-item>`
     )}
     </mwc-list>
@@ -113,7 +114,7 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
         ? ` - ${this._onlineAgents.value.length}`
         : ''
     }</span>
-    
+
 ${this._allProfilesTask.render({
   complete: profiles =>
     this.renderOnlineAgents(profiles, this._onlineAgents.value),

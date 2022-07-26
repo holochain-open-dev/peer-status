@@ -1,11 +1,22 @@
 ---
 manifest_version: "1"
 name: status-test
-uuid: 00000000-0000-0000-0000-000000000000
-properties: ~
-zomes:
-  - name: peer_status
-    bundled: ../../target/wasm32-unknown-unknown/release/hc_zome_peer_status.wasm
-
-  - name: profiles
-    bundled: ../../target/wasm32-unknown-unknown/release/profiles.wasm
+integrity:
+  uuid: 00000000-0000-0000-0000-000000000000
+  properties: ~
+  origin_time: 2022-07-25T13:55:49.200Z
+  zomes:
+    - name: peer_status_integrity
+      bundled: ../../target/wasm32-unknown-unknown/release/hc_zome_peer_status_integrity.wasm
+    - name: profiles_integrity
+      bundled: ../../target/wasm32-unknown-unknown/release/hc_zome_profiles_integrity.wasm
+coordinator:
+  zomes:
+    - name: peer_status
+      bundled: ../../target/wasm32-unknown-unknown/release/hc_zome_peer_status_coordinator.wasm
+      dependencies:
+        - name: peer_status_integrity
+    - name: profiles
+      bundled: ../../target/wasm32-unknown-unknown/release/hc_zome_profiles_coordinator.wasm
+      dependencies:
+        - name: profiles_integrity

@@ -1,9 +1,8 @@
 import { CellClient } from '@holochain-open-dev/cell-client';
 import {
-  AgentPubKeyB64,
   deserializeHash,
   serializeHash,
-} from '@holochain-open-dev/core-types';
+} from '@holochain-open-dev/utils';
 import { CellId, AppSignalCb } from '@holochain/client';
 
 const sleep = (ms: number) => new Promise(r => setTimeout(() => r(null), ms));

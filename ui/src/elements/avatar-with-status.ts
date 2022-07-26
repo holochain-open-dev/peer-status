@@ -6,6 +6,7 @@ import { AgentAvatar } from '@holochain-open-dev/profiles';
 import { property } from 'lit/decorators.js';
 import { sharedStyles } from './utils/shared-styles';
 import { PeerStatus } from './peer-status';
+import { AgentPubKey } from '@holochain/client';
 
 export class AvatarWithStatus extends ScopedElementsMixin(LitElement) {
   /** Public properties */
@@ -15,9 +16,9 @@ export class AvatarWithStatus extends ScopedElementsMixin(LitElement) {
    */
   @property({
     attribute: 'agent-pub-key',
-    type: String,
+    type: Object,
   })
-  agentPubKey!: AgentPubKeyB64;
+  agentPubKey!: AgentPubKey;
 
   render() {
     return html`<agent-avatar .agentPubKey=${this.agentPubKey}>
