@@ -32,18 +32,13 @@ pub fn init(_: ()) -> ExternResult<InitCallbackResult> {
 #[hdk_extern]
 pub fn ping(agents_pub_keys: Vec<AgentPubKey>) -> ExternResult<()> {
     let signal_payload = SignalPayload::Ping {
-        from_agent: agent_info()?.agent_initial_pubkey.into(),
+        from_agent: agent_info()?.agent_initial_pubkey,
     };
-
-    let agents = agents_pub_keys
-        .into_iter()
-        .map(|pub_key| AgentPubKey::from(pub_key))
-        .collect();
 
     let encoded_signal = ExternIO::encode(signal_payload)
         .map_err(|err| wasm_error!(WasmErrorInner::Guest(err.into())))?;
 
-    remote_signal(encoded_signal, agents)
+    remote_signal(encoded_signal, agents_pub_keys)
 }
 
 #[hdk_extern]
@@ -59,11 +54,11 @@ pub fn recv_remote_signal(signal: ExternIO) -> ExternResult<()> {
 
 pub fn pong(from_agent: AgentPubKey) -> ExternResult<()> {
     let signal_payload = SignalPayload::Pong {
-        from_agent: agent_info()?.agent_initial_pubkey.into(),
+        from_agent: agent_info()?.agent_initial_pubkey,
     };
 
     let encoded_signal = ExternIO::encode(signal_payload)
     .map_err(|err| wasm_error!(WasmErrorInner::Guest(err.into())))?;
 
-    remote_signal(encoded_signal, vec![from_agent.into()])
+    remote_signal(encoded_signal, vec![from_agent])
 }

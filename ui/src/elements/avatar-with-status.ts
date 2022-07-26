@@ -1,4 +1,3 @@
-import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { css, html, LitElement } from 'lit';
 import { AgentAvatar } from '@holochain-open-dev/profiles';

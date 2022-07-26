@@ -76,11 +76,9 @@
           );
           this.loaded = true;
 
-          const allProfiles = get(await profilesStore.fetchAllProfiles());
-          console.log(allProfiles);
-          this.agentPubKey = Object.keys(allProfiles).filter(
-            pubkey => profilesStore.myAgentPubKey !== pubkey
-          )[0];
+          console.log("ProfilesStore pubkey: ", profilesStore.myAgentPubKey);
+
+          this.agentPubKey = profilesStore.myAgentPubKey;
         }
 
         render() {
