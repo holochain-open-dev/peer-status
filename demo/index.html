@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons&display=block"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    />
+  </head>
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <body>
+    <status-test-app></status-test-app>
+
+    <script type="module">
+      import {
+        ProfilesStore,
+        ProfilePrompt,
+        profilesStoreContext,
+      } from '@holochain-open-dev/profiles';
+
+      import {
+        PeerStatus,
+        PeerStatusStore,
+        peerStatusStoreContext,
+      } from '../dist';
+      import { get } from 'svelte/store';
+
+      import { ContextProvider } from '@lit-labs/context';
+      import { HolochainClient } from '@holochain-open-dev/cell-client';
+      import { ScopedElementsMixin } from '@open-wc/scoped-elements';
+      import { LitElement, html } from 'lit';
+
+      class StatusTestApp extends ScopedElementsMixin(LitElement) {
+        static get properties() {
+          return {
+            loaded: {
+              type: Boolean,
+            },
+            agentPubKey: {
+              type: String,
+            },
+          };
+        }
+
+        async firstUpdated() {
+          const client = await HolochainClient.connect(
+            `ws://localhost:${process.env.HC_PORT}`,
+            'test-app'
+          );
+          const cellClient = client.forCell(client.cellDataByRoleId('status'));
+
+          const profilesStore = new ProfilesStore(cellClient);
+          new ContextProvider(this, profilesStoreContext, profilesStore);
+
+          new ContextProvider(
+            this,
+            peerStatusStoreContext,
+            new PeerStatusStore(cellClient)
+          );
+          this.loaded = true;
+
+          const allProfiles = get(await profilesStore.fetchAllProfiles());
+          console.log(allProfiles);
+          this.agentPubKey = Object.keys(allProfiles).filter(
+            pubkey => profilesStore.myAgentPubKey !== pubkey
+          )[0];
+        }
+
+        render() {
+          if (!this.loaded) return html`<span>Loading...</span>`;
+          return html`
+            <profile-prompt>
+              ${this.agentPubKey
+                ? html`
+                    <peer-status .agentPubKey=${this.agentPubKey}></peer-status>
+                  `
+                : html``}
+            </profile-prompt>
+          `;
+        }
+
+        static get scopedElements() {
+          return {
+            'profile-prompt': ProfilePrompt,
+            'peer-status': PeerStatus,
+          };
+        }
+      }
+
+      customElements.define('status-test-app', StatusTestApp);
+    </script>
+  </body>
+</html>
