@@ -31,7 +31,7 @@ function lastSeenToStatus(now: number, lastSeen: number | undefined): Status {
 export class PeerStatusStore {
   /** Private */
   private _service: PeerStatusService;
-  private _statusStore: HoloHashMap<Readable<number | undefined>> =
+  private _statusStore: HoloHashMap<AgentPubKey, Readable<number | undefined>> =
     new HoloHashMap();
 
   /** Static info */
@@ -68,7 +68,7 @@ export class PeerStatusStore {
 
   subscribeToAgentsStatuses(
     agentPubKeys: AgentPubKey[]
-  ): Readable<HoloHashMap<Status>> {
+  ): Readable<HoloHashMap<AgentPubKey, Status>> {
     const stores = agentPubKeys.map(a =>
       derived(
         [this.subscribeToAgentStatus(a)],
@@ -78,7 +78,7 @@ export class PeerStatusStore {
     return derived(
       stores,
       (agentsArray) => {
-        const holoHashMap: HoloHashMap<Status> = new HoloHashMap();
+        const holoHashMap: HoloHashMap<AgentPubKey, Status> = new HoloHashMap();
         agentsArray.forEach(([key, value]) => {
           holoHashMap.put(key, value);
         });
