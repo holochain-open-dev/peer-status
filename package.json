@@ -10,7 +10,7 @@
     "network": "hc s clean && npm run build:happ && concurrently-repeat \"npm run start:agent\"",
     "start:agent": "cross-env HC_PORT=$(port) concurrently \"npm run playground\" \"npm run start:happ\" \"npm run start -w @holochain-open-dev/peer-status\"",
     "test": "npm run build:happ && npm t -w @holochain-open-dev/status-test",
-    "start:happ": "RUST_LOG=warn hc s generate ./workdir/happ/status-test.happ --run=$HC_PORT network mdns",
+    "start:happ": "RUST_LOG=warn echo \"pass\" | hc s --piped generate ./workdir/happ/status-test.happ --run=$HC_PORT network mdns",
     "build:happ": "npm run build:dna && hc app pack workdir/happ",
     "build:dna": "npm run build:zome && hc dna pack workdir/dna",
     "build:zome": "CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown",
