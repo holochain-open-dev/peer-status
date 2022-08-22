@@ -1,6 +1,6 @@
 import { CellClient } from '@holochain-open-dev/cell-client';
 import { HoloHashMap } from '@holochain-open-dev/utils';
-import { AgentPubKey, HoloHash } from '@holochain/client';
+import { AgentPubKey } from '@holochain/client';
 import merge from 'lodash-es/merge';
 
 import { PeerStatusService } from './peer-status-service';
