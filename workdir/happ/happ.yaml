@@ -10,6 +10,6 @@ roles:
     dna:
       bundled: "../dna/status-test.dna"
       properties: ~
-      uuid: ~
+      network_seed: ~
       version: ~
       clone_limit: 0
