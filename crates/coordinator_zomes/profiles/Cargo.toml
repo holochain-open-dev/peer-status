@@ -14,4 +14,4 @@ chrono = { version = "=0.4.22", default-features = false, features = ["clock", "
 
 hc_zome_profiles_integrity = { path = "../../integrity_zomes/profiles" }
 
-hc_zome_profiles_coordinator = {git = "https://github.com/holochain-open-dev/profiles", rev = "for-hdk-v0.0.147", package = "hc_zome_profiles_coordinator"}
+hc_zome_profiles_coordinator = {git = "https://github.com/holochain-open-dev/profiles", rev = "for-hdk-v0.0.152", package = "hc_zome_profiles_coordinator"}
