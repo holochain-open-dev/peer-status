@@ -14,8 +14,5 @@ crate-type = ["cdylib", "rlib"]
 name = "hc_zome_peer_status_integrity"
 
 [dependencies]
-derive_more = "0"
-serde = "1"
-chrono = { version = "=0.4.22", default-features = false, features = ["clock", "std", "oldtime", "serde"], optional = true }
-
-hdi = "0.1.2"
+serde = { workspace = true }
+hdi = { workspace = true }

@@ -1,11 +1,18 @@
+[profile.dev]
+opt-level = "z"
+
+[profile.release]
+opt-level = "z"
+
 [workspace]
 members = [
   "crates/coordinator_zomes/*",
   "crates/integrity_zomes/*",
 ]
 
-[profile.dev]
-opt-level = "z"
 
-[profile.release]
-opt-level = "z"
+[workspace.dependencies]
+hdi = "0.1"
+hdk = "0.0.161"
+serde = "1"
+holochain = "0.0.173"

@@ -14,10 +14,9 @@ crate-type = ["cdylib", "rlib"]
 name = "hc_zome_peer_status_coordinator"
 
 [dependencies]
-derive_more = "0"
-serde = "1"
-chrono = { version = "=0.4.22", default-features = false, features = ["clock", "std", "oldtime", "serde"], optional = true }
+
+hdk = { workspace = true }
+serde = { workspace = true }
 
 hc_zome_peer_status_integrity = { path= "../../integrity_zomes/peer_status"}
 
-hdk = {version = "0.0.152", features = ["encoding"]}
