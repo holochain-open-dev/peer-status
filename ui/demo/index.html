@@ -13,8 +13,6 @@
     />
   </head>
 
-  <link rel="stylesheet" href="styles.css" />
-
   <body>
     <status-test-app></status-test-app>
 
@@ -32,12 +30,11 @@
         peerStatusStoreContext,
         AvatarWithStatus,
         ListAgentsByStatus
-      } from '../dist';
+      } from '../src';
       import { get } from 'svelte/store';
 
-      import { AppWebsocket } from '@holochain/client'
+      import { AppWebsocket, AppAgentWebsocket } from '@holochain/client';
       import { ContextProvider } from '@lit-labs/context';
-      import { HolochainClient, CellClient } from '@holochain-open-dev/cell-client';
       import { ScopedElementsMixin } from '@open-wc/scoped-elements';
       import { LitElement, html } from 'lit';
 
@@ -54,25 +51,23 @@
         }
 
         async firstUpdated() {
-          const appWs = await AppWebsocket.connect(`ws://localhost:${process.env.HC_PORT}`);
+          const DOES_NOT_MATTER = 1234;
+          const appWs = await AppWebsocket.connect(`ws://localhost:${DOES_NOT_MATTER}`);
 
-          const client = new HolochainClient(appWs);
+          const client = await AppAgentWebsocket.connect(appWs, 'test-app');
+
 
           const appInfo = await appWs.appInfo({
             installed_app_id: 'test-app'
           })
-          const cell = appInfo.cell_data.find(c => c.role_id === 'status');
-          console.log(appInfo, cell)
 
-          const cellClient = new CellClient(client, cell);
-
-          const profilesStore = new ProfilesStore(new ProfilesService(cellClient));
+          const profilesStore = new ProfilesStore(new ProfilesService(client, 'status'));
           new ContextProvider(this, profilesStoreContext, profilesStore);
 
           new ContextProvider(
             this,
             peerStatusStoreContext,
-            new PeerStatusStore(cellClient)
+            new PeerStatusStore(client)
           );
           this.loaded = true;
 

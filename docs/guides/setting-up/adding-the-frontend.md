@@ -7,13 +7,13 @@
 1. Install this module and its necessary dependencies with:
 
 ```bash
-npm install @holochain-open-dev/status @holochain-open-dev/context @holochain-open-dev/cell-client
+npm install @holochain-open-dev/status @holochain-open-dev/context
 ```
 
 Careful! If you are using NPM workspaces (which is the case for the apps generated with the Holochain scaffolding and RAD tools), you need to specify which workspace you want to install those dependencies to. In the case of the apps generated with the RAD tools:
 
 ```bash
-npm install @holochain-open-dev/status @holochain-open-dev/context @holochain-open-dev/cell-client -w ui
+npm install @holochain-open-dev/status @holochain-open-dev/context -w ui
 ```
 
 2. [Choose which elements you need](../frontend/elements.md) and import them:

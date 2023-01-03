@@ -49,7 +49,7 @@ export class PeerStatusStore {
     config: Partial<PeerStatusConfig> = {}
   ) {
     this.config = merge(defaultConfig, config);
-    this._service = new PeerStatusService(client, this.config.zomeName);
+    this._service = new PeerStatusService(client, "status", this.config.zomeName);
     this.myAgentPubKey = client.myPubKey;
 
     setInterval(() => this.ping(), 2000);

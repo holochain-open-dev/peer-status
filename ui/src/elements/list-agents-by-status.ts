@@ -66,7 +66,7 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
   );
 
   renderOnlineAgents(
-    profiles: HoloHashMap<AgentPubKey, Profile | undefined>,
+    profiles: HoloHashMap<AgentPubKey, Profile>,
     agentPubKeys: AgentPubKey[]
   ) {
     if (agentPubKeys.length === 0)
@@ -86,7 +86,7 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
     `;
   }
   renderOfflineAgents(
-    profiles: HoloHashMap<AgentPubKey, Profile | undefined>,
+    profiles: HoloHashMap<AgentPubKey, Profile>,
     agentPubKeys: AgentPubKey[]
   ) {
     if (agentPubKeys.length === 0)
