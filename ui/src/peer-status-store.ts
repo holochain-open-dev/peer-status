@@ -1,6 +1,5 @@
-import { CellClient } from '@holochain-open-dev/cell-client';
 import { HoloHashMap } from '@holochain-open-dev/utils';
-import { AgentPubKey } from '@holochain/client';
+import { AgentPubKey, AppAgentClient } from '@holochain/client';
 import merge from 'lodash-es/merge';
 
 import { PeerStatusService } from './peer-status-service';
@@ -46,12 +45,12 @@ export class PeerStatusStore {
   });
 
   constructor(
-    protected cellClient: CellClient,
+    protected client: AppAgentClient,
     config: Partial<PeerStatusConfig> = {}
   ) {
     this.config = merge(defaultConfig, config);
-    this._service = new PeerStatusService(cellClient, this.config.zomeName);
-    this.myAgentPubKey = cellClient.cell.cell_id[1];
+    this._service = new PeerStatusService(client, this.config.zomeName);
+    this.myAgentPubKey = client.myPubKey;
 
     setInterval(() => this.ping(), 2000);
     this.ping();
@@ -92,7 +91,8 @@ export class PeerStatusStore {
       this._statusStore.put(agentPubKey, readable<undefined | number>(
         undefined,
         set => {
-          const { unsubscribe } = this.cellClient.addSignalHandler(signal => {
+          // note that currently, this listens to signals of all (cloned) cells of a hApp
+          const unsubscribe = this.client.on("signal", (signal) => {
             const signalPayload = signal.data.payload;
 
             if (
