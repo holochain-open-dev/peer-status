@@ -12,13 +12,13 @@ import { List, ListItem } from '@scoped-elements/material-web';
 import { property } from 'lit/decorators.js';
 import { sharedStyles } from './utils/shared-styles';
 import { PeerStatusStore, Status } from '../peer-status-store';
-import { contextProvided } from '@lit-labs/context';
+import { consume } from '@lit-labs/context';
 import { peerStatusStoreContext } from '../context';
 import { StoreSubscriber, TaskSubscriber } from 'lit-svelte-stores';
 import { derived } from 'svelte/store';
 import { AvatarWithStatus } from './avatar-with-status';
 import { AgentPubKey } from '@holochain/client';
-import { HoloHashMap } from '@holochain-open-dev/utils';
+import { DisplayError } from "@holochain-open-dev/elements";
 
 export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
   /** Public properties */
@@ -35,18 +35,17 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
    * `PeerStatusStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: peerStatusStoreContext, subscribe: true })
+  @consume({ context: peerStatusStoreContext, subscribe: true })
   @property({ type: Object })
   store!: PeerStatusStore;
 
-  @contextProvided({ context: profilesStoreContext, subscribe: true })
+  @consume({ context: profilesStoreContext, subscribe: true })
   @property({ type: Object })
   profilesStore!: ProfilesStore;
 
-  private _allProfilesTask = new TaskSubscriber(
+  private _allProfiles = new StoreSubscriber(
     this,
-    () => this.profilesStore.fetchAgentsProfiles(this.agents),
-    () => [this.profilesStore, ...this.agents]
+    () => this.profilesStore.allProfiles
   );
 
   private _onlineAgents = new StoreSubscriber(this, () =>
@@ -66,7 +65,7 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
   );
 
   renderOnlineAgents(
-    profiles: HoloHashMap<AgentPubKey, Profile>,
+    profiles: ReadonlyMap<AgentPubKey, Profile>,
     agentPubKeys: AgentPubKey[]
   ) {
     if (agentPubKeys.length === 0)
@@ -86,7 +85,7 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
     `;
   }
   renderOfflineAgents(
-    profiles: HoloHashMap<AgentPubKey, Profile>,
+    profiles: ReadonlyMap<AgentPubKey, Profile>,
     agentPubKeys: AgentPubKey[]
   ) {
     if (agentPubKeys.length === 0)
@@ -106,34 +105,66 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
     `;
   }
 
-  render() {
+  renderHeading() {
     return html`
     <div class="column" style="flex: 1">
-<span class="title">Online${
-      this._onlineAgents.value !== undefined
-        ? ` - ${this._onlineAgents.value.length}`
-        : ''
-    }</span>
+      <span class="title">Online${
+        this._onlineAgents.value !== undefined
+          ? ` - ${this._onlineAgents.value.length}`
+          : ''
+      }</span>
+    `
+  }
 
-${this._allProfilesTask.render({
-  complete: profiles =>
-    this.renderOnlineAgents(profiles, this._onlineAgents.value),
-  pending: () => Array(3).map(() => html`<sl-skeleton></sl-skeleton>`),
-})}
+  render() {
 
-<span class="title">Offline${
-      this._offlineAgents.value !== undefined
-        ? ` - ${this._offlineAgents.value.length}`
-        : ''
-    }</span>
-${this._allProfilesTask.render({
-  complete: profiles =>
-    this.renderOfflineAgents(profiles, this._offlineAgents.value),
-  pending: () => Array(3).map(() => html`<sl-skeleton></sl-skeleton>`),
-})}
+    switch (this._allProfiles.value.status) {
+      case "pending":
+        return html`
+          <div class="column" style="flex: 1">
+            ${this.renderHeading()}
+            ${Array(3).map(() => html`<sl-skeleton></sl-skeleton>`)}
+          </div>
+        `;
+      case "complete":
+        return html`
+          <div class="column" style="flex: 1">
+            ${this.renderHeading()}
+            ${this.renderOnlineAgents(this._allProfiles.value.value, this._onlineAgents.value)}
+            ${this.renderOfflineAgents(this._allProfiles.value.value, this._offlineAgents.value)}
+          </div>
+        `;
+      case "error":
+        return html`
+          <div class="column" style="flex: 1">
+            <display-error
+              .error=${this._allProfiles.value.error.data.data}
+            ></display-error>
+          </div>
+        `;
+    }
 
-      </div>
-    `;
+
+// html`
+// ${this._allProfilesTask.render({
+//   complete: profiles =>
+//     this.renderOnlineAgents(profiles, this._onlineAgents.value),
+//   pending: () => Array(3).map(() => html`<sl-skeleton></sl-skeleton>`),
+// })}
+
+// <span class="title">Offline${
+//       this._offlineAgents.value !== undefined
+//         ? ` - ${this._offlineAgents.value.length}`
+//         : ''
+//     }</span>
+// ${this._allProfilesTask.render({
+//   complete: profiles =>
+//     this.renderOfflineAgents(profiles, this._offlineAgents.value),
+//   pending: () => Array(3).map(() => html`<sl-skeleton></sl-skeleton>`),
+// })}
+
+//       </div>
+//     `;
   }
 
   static styles = [
@@ -158,6 +189,7 @@ ${this._allProfilesTask.render({
     return {
       'avatar-with-status': AvatarWithStatus,
       'agent-avatar': AgentAvatar,
+      "display-error": DisplayError,
       'sl-skeleton': SlSkeleton,
       'mwc-list': List,
       'mwc-list-item': ListItem,

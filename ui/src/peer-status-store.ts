@@ -5,6 +5,7 @@ import merge from 'lodash-es/merge';
 import { PeerStatusService } from './peer-status-service';
 import { derived, Readable, readable } from 'svelte/store';
 import { defaultConfig, PeerStatusConfig } from './config';
+import { SignalPayload } from './types';
 
 /**
  * {
@@ -93,11 +94,11 @@ export class PeerStatusStore {
         set => {
           // note that currently, this listens to signals of all (cloned) cells of a hApp
           const unsubscribe = this.client.on("signal", (signal) => {
-            const signalPayload = signal.data.payload;
+            const peerStatusSignal = (signal.payload as SignalPayload);
 
             if (
-              signalPayload.type === 'Pong' &&
-              signalPayload.from_agent === agentPubKey
+              peerStatusSignal.type === 'Pong' &&
+              peerStatusSignal.from_agent === agentPubKey
             ) {
               set(Date.now());
             }

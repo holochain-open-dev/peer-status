@@ -19,7 +19,7 @@
     <script type="module">
       import {
         ProfilesStore,
-        ProfilesService,
+        ProfilesClient,
         ProfilePrompt,
         profilesStoreContext,
       } from '@holochain-open-dev/profiles';
@@ -61,7 +61,7 @@
             installed_app_id: 'test-app'
           })
 
-          const profilesStore = new ProfilesStore(new ProfilesService(client, 'status'));
+          const profilesStore = new ProfilesStore(new ProfilesClient(client, 'status'));
           new ContextProvider(this, profilesStoreContext, profilesStore);
 
           new ContextProvider(

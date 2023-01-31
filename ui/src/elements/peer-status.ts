@@ -1,4 +1,4 @@
-import { contextProvided } from '@lit-labs/context';
+import { consume } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { css, html, LitElement } from 'lit';
@@ -27,7 +27,7 @@ export class PeerStatus extends ScopedElementsMixin(LitElement) {
    * `PeerStatusStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: peerStatusStoreContext, subscribe: true })
+  @consume({ context: peerStatusStoreContext, subscribe: true })
   @property({ type: Object })
   store!: PeerStatusStore;
 
