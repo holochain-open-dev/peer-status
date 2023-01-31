@@ -12,7 +12,7 @@ members = [
 
 
 [workspace.dependencies]
-hdi = "0.2.0-beta-rc.1"
-hdk = "0.1.0-beta-rc.1"
+hdi = "0.2.0"
+hdk = "0.1.0"
 serde = "1"
-holochain = "0.1.0-beta-rc.2"
+holochain = "0.1.0-"

@@ -10,9 +10,9 @@ const production = !process.env.ROLLUP_WATCH;
 export default {
   input: 'demo/index.html',
   output: {
-    // entryFileNames: '[hash].js',
-    // chunkFileNames: '[hash].js',
-    // assetFileNames: '[hash][extname]',
+    entryFileNames: '[hash].js',
+    chunkFileNames: '[hash].js',
+    assetFileNames: '[hash][extname]',
     format: 'es',
     dir: 'demo/dist',
     sourcemap: true,
@@ -26,9 +26,9 @@ export default {
   plugins: [
     /** Enable using HTML as rollup entrypoint */
     html({
-      // minify: true,
-      // injectServiceWorker: true,
-      // serviceWorkerPath: 'dist/sw.js',
+      minify: true,
+      injectServiceWorker: true,
+      serviceWorkerPath: 'dist/sw.js',
     }),
     /** Resolve bare module imports */
     nodeResolve({
@@ -41,7 +41,7 @@ export default {
       outDir: "demo/dist",
     }),
     /** Minify JS */
-    // production && terser(),
+    production && terser(),
     /** Compile JS to a lower language target */
     babel({
       babelHelpers: 'bundled',
