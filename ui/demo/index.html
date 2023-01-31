@@ -54,12 +54,7 @@
           const DOES_NOT_MATTER = 1234;
           const appWs = await AppWebsocket.connect(`ws://localhost:${DOES_NOT_MATTER}`);
 
-          const client = await AppAgentWebsocket.connect(appWs, 'test-app');
-
-
-          const appInfo = await appWs.appInfo({
-            installed_app_id: 'test-app'
-          })
+          const client = await AppAgentWebsocket.connect(appWs, 'status-test');
 
           const profilesStore = new ProfilesStore(new ProfilesClient(client, 'status'));
           new ContextProvider(this, profilesStoreContext, profilesStore);
@@ -71,9 +66,7 @@
           );
           this.loaded = true;
 
-          console.log("ProfilesStore pubkey: ", profilesStore.myAgentPubKey);
-
-          this.agentPubKey = profilesStore.myAgentPubKey;
+          this.agentPubKey = client.myPubKey;
         }
 
         render() {

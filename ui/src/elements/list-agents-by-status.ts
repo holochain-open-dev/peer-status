@@ -1,5 +1,5 @@
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, TemplateResult } from 'lit';
 import {
   AgentAvatar,
   Profile,
@@ -19,6 +19,8 @@ import { derived } from 'svelte/store';
 import { AvatarWithStatus } from './avatar-with-status';
 import { AgentPubKey } from '@holochain/client';
 import { DisplayError } from "@holochain-open-dev/elements";
+
+
 
 export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
   /** Public properties */
@@ -107,7 +109,6 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
 
   renderHeading() {
     return html`
-    <div class="column" style="flex: 1">
       <span class="title">Online${
         this._onlineAgents.value !== undefined
           ? ` - ${this._onlineAgents.value.length}`
@@ -116,33 +117,36 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
     `
   }
 
-  render() {
-
+  renderAgents() {
     switch (this._allProfiles.value.status) {
       case "pending":
         return html`
-          <div class="column" style="flex: 1">
-            ${this.renderHeading()}
             ${Array(3).map(() => html`<sl-skeleton></sl-skeleton>`)}
           </div>
         `;
       case "complete":
         return html`
-          <div class="column" style="flex: 1">
-            ${this.renderHeading()}
             ${this.renderOnlineAgents(this._allProfiles.value.value, this._onlineAgents.value)}
             ${this.renderOfflineAgents(this._allProfiles.value.value, this._offlineAgents.value)}
-          </div>
         `;
       case "error":
         return html`
-          <div class="column" style="flex: 1">
             <display-error
               .error=${this._allProfiles.value.error.data.data}
             ></display-error>
-          </div>
         `;
     }
+  }
+
+
+  render() {
+    return html`
+      <div class="column" style="flex: 1">
+        ${this.renderHeading()}
+        ${this.renderAgents()}
+      </div>
+    `;
+  }
 
 
 // html`
@@ -165,7 +169,6 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
 
 //       </div>
 //     `;
-  }
 
   static styles = [
     sharedStyles,

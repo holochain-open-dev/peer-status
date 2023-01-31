@@ -8,4 +8,4 @@ crate-type = ["cdylib", "rlib"]
 name = "hc_zome_profiles_integrity"
 
 [dependencies]
-hc_zome_profiles_integrity = "0.0.1"
+hc_zome_profiles_integrity = "0.1.0"

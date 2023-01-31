@@ -1,5 +1,5 @@
 import { HoloHashMap } from '@holochain-open-dev/utils';
-import { AgentPubKey, AppAgentClient } from '@holochain/client';
+import { AgentPubKey, AppAgentClient, encodeHashToBase64 } from '@holochain/client';
 import merge from 'lodash-es/merge';
 
 import { PeerStatusService } from './peer-status-service';
@@ -59,8 +59,10 @@ export class PeerStatusStore {
 
   private ping() {
     const agentsWeAreSeeing = this._statusStore.keys();
+    console.log("@ping: ", agentsWeAreSeeing.map((hash) => encodeHashToBase64(hash)));
     if (agentsWeAreSeeing.length > 0) {
       this._service.ping(agentsWeAreSeeing);
+      console.log("I AM PINGINGGGGG !!!!!!!!!!");
     }
   }
 
@@ -92,14 +94,18 @@ export class PeerStatusStore {
       this._statusStore.put(agentPubKey, readable<undefined | number>(
         undefined,
         set => {
-          // note that currently, this listens to signals of all (cloned) cells of a hApp
           const unsubscribe = this.client.on("signal", (signal) => {
             const peerStatusSignal = (signal.payload as SignalPayload);
+
+            console.log("Received signal: ", peerStatusSignal);
+            console.log("serialized pubkey: ", encodeHashToBase64(peerStatusSignal.from_agent));
+            console.log("myAgentPubKey: ", encodeHashToBase64(this.myAgentPubKey));
 
             if (
               peerStatusSignal.type === 'Pong' &&
               peerStatusSignal.from_agent === agentPubKey
             ) {
+              console.log("Condition met!")
               set(Date.now());
             }
           });

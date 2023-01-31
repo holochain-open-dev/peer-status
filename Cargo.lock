@@ -632,18 +632,18 @@ dependencies = [
 name = "hc_zome_profiles_coordinator"
 version = "0.0.1"
 dependencies = [
- "hc_zome_profiles_coordinator 0.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "hc_zome_profiles_integrity 0.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hc_zome_profiles_coordinator 0.1.0",
+ "hc_zome_profiles_integrity 0.1.0",
 ]
 
 [[package]]
 name = "hc_zome_profiles_coordinator"
-version = "0.0.1"
+version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c0109ffa1f1a410dd551413260737ceeaad6dd5cf9b5b92ec7438d2505b44b4f"
+checksum = "d446548193f9a0529c47898e1260d6f1ffe3a71f52a332e7cac12b10d35b9742"
 dependencies = [
  "derive_more",
- "hc_zome_profiles_integrity 0.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hc_zome_profiles_integrity 0.1.0",
  "hdk",
  "serde",
 ]
@@ -652,14 +652,14 @@ dependencies = [
 name = "hc_zome_profiles_integrity"
 version = "0.0.1"
 dependencies = [
- "hc_zome_profiles_integrity 0.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hc_zome_profiles_integrity 0.1.0",
 ]
 
 [[package]]
 name = "hc_zome_profiles_integrity"
-version = "0.0.1"
+version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a7e295f7b794128dd25e80a81175615cdf0a9506edd632c45bdc96d59a13fd1"
+checksum = "7749c3ce685dd07fc55efab8abd24ebba82460ff3e499c098cb224de39177ceb"
 dependencies = [
  "derive_more",
  "hdi",

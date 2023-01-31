@@ -15,4 +15,4 @@ members = [
 hdi = "0.2.0"
 hdk = "0.1.0"
 serde = "1"
-holochain = "0.1.0-"
+holochain = "0.1.0"
