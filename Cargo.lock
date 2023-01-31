@@ -632,15 +632,15 @@ dependencies = [
 name = "hc_zome_profiles_coordinator"
 version = "0.0.1"
 dependencies = [
- "hc_zome_profiles_coordinator 0.1.0",
+ "hc_zome_profiles_coordinator 0.1.1",
  "hc_zome_profiles_integrity 0.1.0",
 ]
 
 [[package]]
 name = "hc_zome_profiles_coordinator"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d446548193f9a0529c47898e1260d6f1ffe3a71f52a332e7cac12b10d35b9742"
+checksum = "b9460530f0ac152fcac325cc3b5239d97efd95576c8d4463b274abf3cc24f38d"
 dependencies = [
  "derive_more",
  "hc_zome_profiles_integrity 0.1.0",

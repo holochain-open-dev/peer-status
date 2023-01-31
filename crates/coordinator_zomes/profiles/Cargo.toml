@@ -10,4 +10,4 @@ name = "hc_zome_profiles_coordinator"
 [dependencies]
 
 hc_zome_profiles_integrity = "0.1.0"
-hc_zome_profiles_coordinator = "0.1.0"
+hc_zome_profiles_coordinator = "0.1.1"
