@@ -11,12 +11,12 @@ export enum Status {
   Offline = "offline",
 }
 
-function lastSeenToStatus(lastSeen: number | undefined): Status {
+function lastSeenToStatus(lastSeen: number | undefined, config:PeerStatusConfig): Status {
   if (lastSeen === undefined) return Status.Offline;
   const now = Date.now();
 
-  if (now - lastSeen < 5000) return Status.Online;
-  if (now - lastSeen < 20000) return Status.Idle;
+  if (now - lastSeen < config.onlineThresholdMs) return Status.Online;
+  if (now - lastSeen < config.idleThresholdMs) return Status.Idle;
   return Status.Offline;
 }
 
@@ -53,6 +53,6 @@ export class PeerStatusStore {
   );
 
   agentsStatus = mapLazyValues(this.agentsLastSeen, (r) =>
-    derived(r, (lastSeen) => lastSeenToStatus(lastSeen))
+    derived(r, (lastSeen) => lastSeenToStatus(lastSeen, this.config))
   );
 }

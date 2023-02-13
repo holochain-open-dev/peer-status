@@ -1,0 +1,27 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Backend/Setting up the zomes" />
+
+# Setting up the zomes
+
+> This guide assumes you are inside a nix development environment with `hc scaffold` available.
+
+1. Scaffold a new zome pair named `peer_status` with:
+
+```bash
+hc scaffold zome peer_status
+```
+
+Select the "Coordinator zome" option, and accept the path that the scaffolding tool offers to scaffold the zomes.
+
+2. Add the `hc_zome_peer_status_coordinator` zome as dependency with:
+
+```bash
+cargo add -p peer_status hc_zome_peer_status_coordinator
+```
+
+3. Go into the newly scaffolded coordinator zome's `lib.rs` (its path may be similar to `dnas/lobby/zomes/coordinator/peer_status/src/lib.rs`) and **replace its contents with**:
+
+```rust
+extern crate hc_zome_peer_status_coordinator;
+```

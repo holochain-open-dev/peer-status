@@ -1,5 +1,6 @@
-import { AppAgentClient } from "@holochain/client";
+import { AgentPubKey, AppAgentClient } from "@holochain/client";
 import { ZomeMock } from "@holochain-open-dev/utils";
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(() => r(null), ms));
-export class StatusZomeMock extends ZomeMock implements AppAgentClient {}
+export class PeerStatusZomeMock extends ZomeMock implements AppAgentClient {
+  async ping(_agents: AgentPubKey[]) {}
+}

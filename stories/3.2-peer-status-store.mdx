@@ -1,0 +1,32 @@
+import { Meta } from '@storybook/addon-docs';
+import { ArgsTable } from '@storybook/addon-docs/blocks';
+import {PeerStatusStore} from '@holochain-open-dev/profiles'
+
+<Meta title="Frontend/PeerStatusStore" />
+
+# PeerStatusStore
+
+The `PeerStatusStore` is a typescript class that contains `svelte` stores, to which you can subscribe to get reactive updates in your elements.
+
+```js
+import { PeerStatusStore, PeerStatusClient } from "@holochain-open-dev/peer-status";
+
+const config = {
+  pingIntervalMs: 2000
+};
+const store = new PeerStatusStore(new PeerStatusClient(appAgentClient, 'my-role-name'), config);
+```
+
+> Learn how to setup the `AppAgentClient` object [here](https://www.npmjs.com/package/@holochain/client).
+
+The config for the `PeerStatusStore` has these options:
+
+```ts
+export interface PeerStatusConfig {
+  pingIntervalMs: number;
+  onlineThresholdMs: number; // The amount of milliseconds after which the agent is not considered to be online anymore, and is idle
+  idleThresholdMs: number;   // The amount of milliseconds after which the agent is not considered to be idle anymore, and is offline
+}
+```
+
+Learn more about the stores and how to integrate them in different frameworks [here](https://holochain-open-dev.github.io/reusable-modules/frontend/using/#stores).

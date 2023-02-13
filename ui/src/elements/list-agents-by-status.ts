@@ -32,13 +32,15 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
   agents!: AgentPubKey[];
 
   /**
-   * `PeerStatusStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
   @consume({ context: peerStatusStoreContext, subscribe: true })
   @property({ type: Object })
   store!: PeerStatusStore;
 
+  /**
+   * @internal
+   */
   @consume({ context: profilesStoreContext, subscribe: true })
   @property({ type: Object })
   profilesStore!: ProfilesStore;
