@@ -1,11 +1,11 @@
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { css, html, LitElement } from 'lit';
-import { AgentAvatar } from '@holochain-open-dev/profiles';
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { css, html, LitElement } from "lit";
+import { AgentAvatar } from "@holochain-open-dev/profiles";
+import { AgentPubKey } from "@holochain/client";
+import { sharedStyles, hashProperty } from "@holochain-open-dev/elements";
 
-import { property } from 'lit/decorators.js';
-import { sharedStyles } from './utils/shared-styles';
-import { PeerStatus } from './peer-status';
-import { AgentPubKey } from '@holochain/client';
+import { property } from "lit/decorators.js";
+import { PeerStatus } from "./peer-status";
 
 export class AvatarWithStatus extends ScopedElementsMixin(LitElement) {
   /** Public properties */
@@ -13,16 +13,13 @@ export class AvatarWithStatus extends ScopedElementsMixin(LitElement) {
   /**
    * REQUIRED. The public key identifying the agent whose presence is going to be shown.
    */
-  @property({
-    attribute: 'agent-pub-key',
-    type: Object,
-  })
+  @property(hashProperty("agent-pub-key"))
   agentPubKey!: AgentPubKey;
 
   render() {
     return html`<agent-avatar .agentPubKey=${this.agentPubKey}>
-        <peer-status .agentPubKey=${this.agentPubKey} slot="badge"></peer-status>
-      </agent-avatar>`;
+      <peer-status .agentPubKey=${this.agentPubKey} slot="badge"></peer-status>
+    </agent-avatar>`;
   }
 
   static styles = [
@@ -36,8 +33,8 @@ export class AvatarWithStatus extends ScopedElementsMixin(LitElement) {
 
   static get scopedElements() {
     return {
-      'agent-avatar': AgentAvatar,
-      'peer-status': PeerStatus,
+      "agent-avatar": AgentAvatar,
+      "peer-status": PeerStatus,
     };
   }
 }

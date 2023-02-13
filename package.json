@@ -1,37 +1,31 @@
 {
-  "name": "@holochain-open-dev/status-dev",
+  "name": "@holochain-open-dev/peer-status-dev",
   "private": true,
-  "workspaces": [
-    "ui",
-    "tests"
-  ],
+  "workspaces": ["ui"],
   "scripts": {
     "start": "AGENTS=2 npm run network",
     "network": "hc s clean && npm run build:happ && UI_PORT=8888 concurrently \"npm start -w ui\" \"npm run launch:happ\" \"holochain-playground\"",
-    "test": "npm run build:happ && npm t -w @holochain-open-dev/status-test",
-    "launch:happ": "WASM_LOG=debug RUST_LOG=debug echo \"pass\" | hc launch --piped -n $AGENTS ./workdir/happ/status-test.happ --ui-port $UI_PORT network mdns",
+    "test": "npm run build:happ && cargo nextest run -j 1",
+    "launch:happ": "echo \"pass\" | hc launch --piped -n $AGENTS ./workdir/happ/status-test.happ --ui-port $UI_PORT network mdns",
     "build:happ": "npm run build:zome && hc app pack workdir/happ --recursive",
     "build:zome": "CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown",
-    "playground": "run-singleton \"holochain-playground\"",
-    "docs:setup": "npm run -w @holochain-open-dev/status analyze && cp ui/custom-elements.json docs/_assets/_static",
-    "docs:start": "npm run docs:setup && rocket start",
-    "docs:publish": "npm run docs:setup && rocket build && gh-pages --dotfiles -d ./_site -b gh-pages"
+    "docs:start": "npm run docs:setup && storybook dev -p 6006",
+    "docs:publish": "npm run docs:setup && storybook build && gh-pages -d ./storybook-static -b gh-pages",
+    "docs:setup": "npm run build -w @holochain-open-dev/peer-status && npm run analyze -w @holochain-open-dev/peer-status"
   },
   "devDependencies": {
-    "@custom-elements-manifest/to-markdown": "^0.1.0",
     "@holochain-playground/cli": "^0.1.0",
-    "@rocket/cli": "^0.10.0",
-    "@rocket/launch": "^0.6.0",
-    "@rollup/plugin-commonjs": "^21.0.1",
-    "@rollup/plugin-replace": "^3.0.1",
-    "@scoped-elements/markdown-renderer": "^0.0.3",
-    "api-viewer-element": "^1.0.0-pre.4",
+    "@storybook/addon-essentials": "^7.0.0-beta.33",
+    "@storybook/addon-links": "^7.0.0-beta.33",
+    "@storybook/blocks": "^7.0.0-beta.33",
+    "@storybook/web-components": "^7.0.0-beta.33",
+    "@storybook/web-components-webpack5": "^7.0.0-beta.33",
     "concurrently": "^6.2.1",
-    "concurrently-repeat": "^0.0.1",
-    "cross-env": "^7.0.3",
     "gh-pages": "^3.2.3",
-    "new-port-cli": "^1.0.0",
-    "run-singleton-cli": "^0.0.7"
+    "lit-html": "^2.6.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "storybook": "^7.0.0-beta.33"
   },
   "type": "module"
 }

@@ -1,13 +1,13 @@
-import { consume } from '@lit-labs/context';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { StoreSubscriber } from 'lit-svelte-stores';
-import { css, html, LitElement } from 'lit';
+import { consume } from "@lit-labs/context";
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { StoreSubscriber } from "lit-svelte-stores";
+import { AgentPubKey } from "@holochain/client";
+import { css, html, LitElement } from "lit";
+import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
+import { property } from "lit/decorators.js";
 
-import { property } from 'lit/decorators.js';
-import { peerStatusStoreContext } from '../context';
-import { PeerStatusStore } from '../peer-status-store';
-import { sharedStyles } from './utils/shared-styles';
-import { AgentPubKey } from '@holochain/client';
+import { peerStatusStoreContext } from "../context";
+import { PeerStatusStore } from "../peer-status-store";
 
 export class PeerStatus extends ScopedElementsMixin(LitElement) {
   /** Public properties */
@@ -15,10 +15,7 @@ export class PeerStatus extends ScopedElementsMixin(LitElement) {
   /**
    * REQUIRED. The public key identifying the agent whose presence is going to be shown.
    */
-  @property({
-    attribute: 'agent-pub-key',
-    type: Object,
-  })
+  @property(hashProperty("agent-pub-key"))
   agentPubKey!: AgentPubKey;
 
   /** Dependencies */
@@ -32,11 +29,13 @@ export class PeerStatus extends ScopedElementsMixin(LitElement) {
   store!: PeerStatusStore;
 
   private _status = new StoreSubscriber(this, () =>
-    this.store.subscribeToAgentStatus(this.agentPubKey)
+    this.store.agentsStatus.get(this.agentPubKey)
   );
 
   render() {
-    return html`<div class="outer"><div class=${this._status.value}></div></div>`;
+    return html`<div class="outer">
+      <div class=${this._status.value}></div>
+    </div>`;
   }
 
   static styles = [

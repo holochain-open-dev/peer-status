@@ -1,7 +1,7 @@
 export interface PeerStatusConfig {
-  zomeName: string;
+  pingIntervalMs: number;
 }
 
 export const defaultConfig: PeerStatusConfig = {
-  zomeName: 'peer_status',
+  pingIntervalMs: 2000,
 };

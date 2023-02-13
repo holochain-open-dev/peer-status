@@ -22,21 +22,22 @@
         ProfilesClient,
         ProfilePrompt,
         profilesStoreContext,
-      } from '@holochain-open-dev/profiles';
+      } from "@holochain-open-dev/profiles";
 
       import {
         PeerStatus,
         PeerStatusStore,
         peerStatusStoreContext,
         AvatarWithStatus,
-        ListAgentsByStatus
-      } from '../src';
-      import { get } from 'svelte/store';
+        PeerStatusClient,
+        ListAgentsByStatus,
+      } from "../src";
+      import { get } from "svelte/store";
 
-      import { AppWebsocket, AppAgentWebsocket } from '@holochain/client';
-      import { ContextProvider } from '@lit-labs/context';
-      import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-      import { LitElement, html } from 'lit';
+      import { AppWebsocket, AppAgentWebsocket } from "@holochain/client";
+      import { ContextProvider } from "@lit-labs/context";
+      import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+      import { LitElement, html } from "lit";
 
       class StatusTestApp extends ScopedElementsMixin(LitElement) {
         static get properties() {
@@ -44,7 +45,7 @@
             loaded: {
               type: Boolean,
             },
-            agentPubKey: {
+            agents: {
               type: String,
             },
           };
@@ -52,32 +53,43 @@
 
         async firstUpdated() {
           const DOES_NOT_MATTER = 1234;
-          const appWs = await AppWebsocket.connect(`ws://localhost:${DOES_NOT_MATTER}`);
 
-          const client = await AppAgentWebsocket.connect(appWs, 'status-test');
+          const client = await AppAgentWebsocket.connect("", "status-test");
 
-          const profilesStore = new ProfilesStore(new ProfilesClient(client, 'status'));
+          const profilesStore = new ProfilesStore(
+            new ProfilesClient(client, "status")
+          );
           new ContextProvider(this, profilesStoreContext, profilesStore);
 
           new ContextProvider(
             this,
             peerStatusStoreContext,
-            new PeerStatusStore(client)
+            new PeerStatusStore(
+              new PeerStatusClient(client, "status", "peer_status")
+            )
           );
-          this.loaded = true;
 
-          this.agentPubKey = client.myPubKey;
+          profilesStore.agentsWithProfile.subscribe((asyncStatus) => {
+            if (asyncStatus.status === "complete") {
+              this.loaded = true;
+              this.agents = asyncStatus.value;
+            }
+          });
         }
 
         render() {
           if (!this.loaded) return html`<span>Loading...</span>`;
           return html`
             <profile-prompt>
-              ${this.agentPubKey
+              ${this.agents
                 ? html`
-                    <list-agents-by-status .agents=${[this.agentPubKey]}></list-agents-by-status>
-                    <avatar-with-status .agentPubKey=${this.agentPubKey}></avatar-with-status>
-                    <peer-status .agentPubKey=${this.agentPubKey}></peer-status>
+                    <list-agents-by-status
+                      .agents=${this.agents}
+                    ></list-agents-by-status>
+                    <avatar-with-status
+                      .agentPubKey=${this.agents[0]}
+                    ></avatar-with-status>
+                    <peer-status .agentPubKey=${this.agents[0]}></peer-status>
                   `
                 : html``}
             </profile-prompt>
@@ -86,15 +98,15 @@
 
         static get scopedElements() {
           return {
-            'profile-prompt': ProfilePrompt,
-            'peer-status': PeerStatus,
-            'avatar-with-status': AvatarWithStatus,
-            'list-agents-by-status': ListAgentsByStatus
+            "profile-prompt": ProfilePrompt,
+            "peer-status": PeerStatus,
+            "avatar-with-status": AvatarWithStatus,
+            "list-agents-by-status": ListAgentsByStatus,
           };
         }
       }
 
-      customElements.define('status-test-app', StatusTestApp);
+      customElements.define("status-test-app", StatusTestApp);
     </script>
   </body>
 </html>
