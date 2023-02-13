@@ -131,7 +131,7 @@
               "name": "ping",
               "parameters": [
                 {
-                  "name": "agents",
+                  "name": "_agents",
                   "type": {
                     "text": "AgentPubKey[]"
                   }
@@ -375,29 +375,6 @@
                 "name": "ListAgentsByStatus",
                 "module": "src/elements/list-agents-by-status.ts"
               }
-            },
-            {
-              "name": "store",
-              "type": {
-                "text": "PeerStatusStore"
-              },
-              "description": "`PeerStatusStore` that is requested via context.",
-              "fieldName": "store",
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
-            },
-            {
-              "name": "profilesStore",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "fieldName": "profilesStore",
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
             }
           ],
           "members": [
@@ -409,61 +386,6 @@
               },
               "description": "REQUIRED. The public keys identifying the agents whose presence is going to be shown.",
               "attribute": "agents",
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "PeerStatusStore"
-              },
-              "description": "`PeerStatusStore` that is requested via context.",
-              "attribute": "store",
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "profilesStore",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "attribute": "profilesStore",
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_allProfiles",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () =>\n    this.profilesStore.agentsProfiles(this.agents)\n  )",
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_onlineAgents",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () =>\n    derived(\n      joinMap(slice(this.store.agentsStatus, this.agents)),\n      (agentsStatus) =>\n        Array.from(\n          pickBy(\n            agentsStatus,\n            (status, _key) => status === Status.Online\n          ).keys()\n        )\n    )\n  )",
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_offlineAgents",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () =>\n    derived(\n      joinMap(slice(this.store.agentsStatus, this.agents)),\n      (agentsStatus) =>\n        Array.from(\n          pickBy(\n            agentsStatus,\n            (status, _key) => status === Status.Offline\n          ).keys()\n        )\n    )\n  )",
               "inheritedFrom": {
                 "name": "ListAgentsByStatus",
                 "module": "src/elements/list-agents-by-status.ts"
@@ -524,15 +446,6 @@
             {
               "kind": "method",
               "name": "renderAgents",
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "scopedElements",
-              "static": true,
               "inheritedFrom": {
                 "name": "ListAgentsByStatus",
                 "module": "src/elements/list-agents-by-status.ts"
@@ -632,18 +545,6 @@
                 "name": "PeerStatus",
                 "module": "src/elements/peer-status.ts"
               }
-            },
-            {
-              "name": "store",
-              "type": {
-                "text": "PeerStatusStore"
-              },
-              "description": "`PeerStatusStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store",
-              "inheritedFrom": {
-                "name": "PeerStatus",
-                "module": "src/elements/peer-status.ts"
-              }
             }
           ],
           "members": [
@@ -655,29 +556,6 @@
               },
               "description": "REQUIRED. The public key identifying the agent whose presence is going to be shown.",
               "attribute": "agentPubKey",
-              "inheritedFrom": {
-                "name": "PeerStatus",
-                "module": "src/elements/peer-status.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "PeerStatusStore"
-              },
-              "description": "`PeerStatusStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store",
-              "inheritedFrom": {
-                "name": "PeerStatus",
-                "module": "src/elements/peer-status.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_status",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () =>\n    this.store.agentsStatus.get(this.agentPubKey)\n  )",
               "inheritedFrom": {
                 "name": "PeerStatus",
                 "module": "src/elements/peer-status.ts"
@@ -774,41 +652,6 @@
               "attribute": "agents"
             },
             {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "PeerStatusStore"
-              },
-              "description": "`PeerStatusStore` that is requested via context.",
-              "attribute": "store"
-            },
-            {
-              "kind": "field",
-              "name": "profilesStore",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "attribute": "profilesStore"
-            },
-            {
-              "kind": "field",
-              "name": "_allProfiles",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () =>\n    this.profilesStore.agentsProfiles(this.agents)\n  )"
-            },
-            {
-              "kind": "field",
-              "name": "_onlineAgents",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () =>\n    derived(\n      joinMap(slice(this.store.agentsStatus, this.agents)),\n      (agentsStatus) =>\n        Array.from(\n          pickBy(\n            agentsStatus,\n            (status, _key) => status === Status.Online\n          ).keys()\n        )\n    )\n  )"
-            },
-            {
-              "kind": "field",
-              "name": "_offlineAgents",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () =>\n    derived(\n      joinMap(slice(this.store.agentsStatus, this.agents)),\n      (agentsStatus) =>\n        Array.from(\n          pickBy(\n            agentsStatus,\n            (status, _key) => status === Status.Offline\n          ).keys()\n        )\n    )\n  )"
-            },
-            {
               "kind": "method",
               "name": "renderOnlineAgents",
               "parameters": [
@@ -851,11 +694,6 @@
             {
               "kind": "method",
               "name": "renderAgents"
-            },
-            {
-              "kind": "field",
-              "name": "scopedElements",
-              "static": true
             }
           ],
           "attributes": [
@@ -866,21 +704,6 @@
               },
               "description": "REQUIRED. The public keys identifying the agents whose presence is going to be shown.",
               "fieldName": "agents"
-            },
-            {
-              "name": "store",
-              "type": {
-                "text": "PeerStatusStore"
-              },
-              "description": "`PeerStatusStore` that is requested via context.",
-              "fieldName": "store"
-            },
-            {
-              "name": "profilesStore",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "fieldName": "profilesStore"
             }
           ],
           "mixins": [
@@ -969,21 +792,6 @@
               },
               "description": "REQUIRED. The public key identifying the agent whose presence is going to be shown.",
               "attribute": "agentPubKey"
-            },
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "PeerStatusStore"
-              },
-              "description": "`PeerStatusStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store"
-            },
-            {
-              "kind": "field",
-              "name": "_status",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () =>\n    this.store.agentsStatus.get(this.agentPubKey)\n  )"
             }
           ],
           "attributes": [
@@ -994,14 +802,6 @@
               },
               "description": "REQUIRED. The public key identifying the agent whose presence is going to be shown.",
               "fieldName": "agentPubKey"
-            },
-            {
-              "name": "store",
-              "type": {
-                "text": "PeerStatusStore"
-              },
-              "description": "`PeerStatusStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store"
             }
           ],
           "mixins": [

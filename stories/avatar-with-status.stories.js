@@ -12,7 +12,7 @@ import {
   PeerStatusClient,
 } from "@holochain-open-dev/peer-status";
 import "@holochain-open-dev/peer-status/peer-status-context";
-import "@holochain-open-dev/peer-status/list-agents-by-status";
+import "@holochain-open-dev/peer-status/avatar-with-status";
 
 const profiles = demoProfiles();
 const profilesStore = new ProfilesStore(
@@ -21,9 +21,9 @@ const profilesStore = new ProfilesStore(
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/web-components/writing-stories/introduction
 export default {
-  title: "Frontend/Elements/list-agents-by-status",
+  title: "Frontend/Elements/avatar-with-status",
   tags: ["autodocs"],
-  component: "list-agents-by-status",
+  component: "avatar-with-status",
   render: (args) =>
     html` <profiles-context .store=${profilesStore}>
       <peer-status-context
@@ -31,9 +31,9 @@ export default {
           new PeerStatusClient(new PeerStatusZomeMock())
         )}
       >
-        <list-agents-by-status
-          .agents=${Array.from(profiles.keys())}
-        ></list-agents-by-status>
+        <avatar-with-status
+          .agentPubKey=${Array.from(profiles.keys())[0]}
+        ></avatar-with-status>
       </peer-status-context>
     </profiles-context>`,
 };

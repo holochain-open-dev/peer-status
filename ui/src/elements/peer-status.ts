@@ -18,17 +18,17 @@ export class PeerStatus extends ScopedElementsMixin(LitElement) {
   @property(hashProperty("agent-pub-key"))
   agentPubKey!: AgentPubKey;
 
-  /** Dependencies */
-
   /**
-   * `PeerStatusStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
   @consume({ context: peerStatusStoreContext, subscribe: true })
   @property({ type: Object })
   store!: PeerStatusStore;
 
-  private _status = new StoreSubscriber(this, () =>
+  /**
+   * @internal
+   */
+  _status = new StoreSubscriber(this, () =>
     this.store.agentsStatus.get(this.agentPubKey)
   );
 

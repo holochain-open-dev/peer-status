@@ -17,17 +17,10 @@
   "files": ["dist"],
   "scripts": {
     "start": "vite --clearScreen false --port $UI_PORT",
-    "build": "rimraf dist && tsc",
-    "build:watch": "rimraf demo/dist && rollup -c rollup.config.js -w",
-    "test": "npm run build && web-test-runner --coverage",
-    "test-debug": "npm run build && DEBUG=true web-test-runner --coverage",
-    "test-watch": "web-test-runner --watch",
-    "e2e": "CONDUCTOR_URL=ws://localhost:8888 concurrently -k -s first \"npm:test\" \"npm:start-holochain\"",
-    "e2e-debug": "DEBUG=true npm run e2e",
+    "build": "tsc",
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore",
     "analyze": "cem analyze --litelement --exclude dist",
-    "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
-    "publish-to-branch": "npm run lint && npm run build && rimraf node_modules && gh-pages -d ./ -b ui-build && cd .. && npm i"
+    "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore"
   },
   "dependencies": {
     "@holochain-open-dev/elements": "^0.2.3",
@@ -45,7 +38,7 @@
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {
-    "@custom-elements-manifest/analyzer": "^0.5.7",
+    "@custom-elements-manifest/analyzer": "^0.6.8",
     "@lit/localize-tools": "^0.6.3",
     "@open-wc/eslint-config": "^2.0.0",
     "@types/lodash-es": "^4.17.5",
