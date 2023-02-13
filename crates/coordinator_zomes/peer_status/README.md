@@ -1,7 +1,7 @@
-# hc_zome_peer_status
+# hc_zome_peer_status_coordinator
 
-Status coordinator zome for any Holochain app.
+Coordinator zome to display online/offline status indicator for any Holochain app.
 
 ## Documentation
 
-See our [installation instructions and documentation](https://holochain-open-dev.github.io/status).
+See our [installation instructions and documentation](https://holochain-open-dev.github.io/peer-status).
