@@ -1,13 +1,13 @@
 [package]
-authors = ["guillem.cordoba@gmail.com", "eric@harris-braun.com", "tatsuya.g.sato@yumeville.com"]
+authors = ["guillem.cordoba@gmail.com", "matthme@protonmail.com"]
 description = "Peer Status zome for any Holochain app"
 documentation = "https://holochain-open-dev.github.io/peer-status"
 edition = "2021"
-homepage = "https://docs.rs/hc_zome_peer_status"
+homepage = "https://holochain-open-dev.github.io/peer-status"
 license = "MIT"
 name = "hc_zome_peer_status_coordinator"
 repository = "https://github.com/holochain-open-dev/peer-status"
-version = "0.0.1"
+version = "0.1.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -17,6 +17,3 @@ name = "hc_zome_peer_status_coordinator"
 
 hdk = { workspace = true }
 serde = { workspace = true }
-
-hc_zome_peer_status_integrity = { path= "../../integrity_zomes/peer_status"}
-

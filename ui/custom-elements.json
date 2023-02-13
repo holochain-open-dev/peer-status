@@ -286,6 +286,108 @@
     },
     {
       "kind": "javascript-module",
+      "path": "test/mocks/index.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getAppWebsocket"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getAppWebsocket",
+          "declaration": {
+            "name": "getAppWebsocket",
+            "module": "test/mocks/index.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/status.mock.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "StatusMock",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create_status",
+              "parameters": [
+                {
+                  "name": "{ username }"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "search_statuss",
+              "parameters": [
+                {
+                  "name": "{ username_prefix }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_my_status",
+              "parameters": [
+                {
+                  "name": "_"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_agent_status",
+              "parameters": [
+                {
+                  "name": "{ agent_address }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "findAgent",
+              "parameters": [
+                {
+                  "name": "agent_address"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "agents",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "StatusMock",
+          "declaration": {
+            "name": "StatusMock",
+            "module": "test/mocks/status.mock.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/definitions/avatar-with-status.ts",
       "declarations": [
         {
@@ -824,108 +926,6 @@
           "declaration": {
             "name": "PeerStatus",
             "module": "src/elements/peer-status.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "test/mocks/index.js",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "getAppWebsocket"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "getAppWebsocket",
-          "declaration": {
-            "name": "getAppWebsocket",
-            "module": "test/mocks/index.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "test/mocks/status.mock.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "StatusMock",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create_status",
-              "parameters": [
-                {
-                  "name": "{ username }"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "search_statuss",
-              "parameters": [
-                {
-                  "name": "{ username_prefix }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_my_status",
-              "parameters": [
-                {
-                  "name": "_"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_agent_status",
-              "parameters": [
-                {
-                  "name": "{ agent_address }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "findAgent",
-              "parameters": [
-                {
-                  "name": "agent_address"
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "agents",
-              "type": {
-                "text": "array"
-              },
-              "default": "[]"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "StatusMock",
-          "declaration": {
-            "name": "StatusMock",
-            "module": "test/mocks/status.mock.js"
           }
         }
       ]
