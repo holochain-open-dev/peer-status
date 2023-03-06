@@ -1,9 +1,9 @@
 import { derived, readable } from "@holochain-open-dev/stores";
 import { LazyHoloHashMap, mapLazyValues } from "@holochain-open-dev/utils";
 import { AgentPubKey } from "@holochain/client";
-import merge from "lodash-es/merge";
-import { defaultConfig, PeerStatusConfig } from "./config";
-import { PeerStatusClient } from "./peer-status-client";
+import merge from "lodash-es/merge.js";
+import { defaultConfig, PeerStatusConfig } from "./config.js";
+import { PeerStatusClient } from "./peer-status-client.js";
 
 export enum Status {
   Online = "online",
@@ -11,7 +11,10 @@ export enum Status {
   Offline = "offline",
 }
 
-function lastSeenToStatus(lastSeen: number | undefined, config:PeerStatusConfig): Status {
+function lastSeenToStatus(
+  lastSeen: number | undefined,
+  config: PeerStatusConfig
+): Status {
   if (lastSeen === undefined) return Status.Offline;
   const now = Date.now();
 

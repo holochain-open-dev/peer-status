@@ -1,7 +1,7 @@
 import { isSignalFromCellWithRole } from "@holochain-open-dev/utils";
 import { AgentPubKey, AppAgentClient, RoleName } from "@holochain/client";
 import { UnsubscribeFunction } from "emittery";
-import { SignalPayload } from "./types";
+import { SignalPayload } from "./types.js";
 
 export interface PeerStatusEvents {
   ["signal"]: SignalPayload;
