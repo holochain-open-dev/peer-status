@@ -1,49 +1,31 @@
-# This is a basic workflow to help you get started with Actions
 
-name: CI
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the main branch
+name: "test"
 on:
-  push:
-    branches: [ main ]
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push: 
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build-and-test:
+  testbuild:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      # Checks out a copy of your repository on the ubuntu-latest machine
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - uses: cachix/install-nix-action@v12
+      - name: Install nix
+        uses: cachix/install-nix-action@v18
         with:
-          nix_path: nixpkgs=channel:nixos-unstable
+          install_url: https://releases.nixos.org/nix/nix-2.12.0/install
+          extra_nix_config: |
+            experimental-features = flakes nix-command
+      - uses: cachix/cachix-action@v10
+        with:
+          name: holochain-ci
 
-      - name: cachix
+      - name: Install and test
         run: |
-          nix-env -iA cachix -f https://cachix.org/api/v1/install
-          cachix use holochain-ci
+          nix develop --command bash -c "npm i && npm t && npm run lint -w @holochain-open-dev/peer-status && npm run build -w @holochain-open-dev/peer-status"
 
-      - name: build-holochain
-        run: |
-          cd $GITHUB_WORKSPACE
-          nix-shell . --run "npm install"
-          nix-shell . --run "npm run build:happ"
-          
-      - name: test-holochain
-        run: |
-          cd $GITHUB_WORKSPACE
-          nix-shell . --run "npm test"
-          
-      - name: build-ui
-        run: |
-          cd $GITHUB_WORKSPACE
-          nix-shell . --run "cd ui && npm run lint && npm run build"
