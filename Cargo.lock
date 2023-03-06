@@ -613,18 +613,9 @@ dependencies = [
 
 [[package]]
 name = "hc_zome_peer_status_coordinator"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
- "hc_zome_peer_status_integrity",
  "hdk",
- "serde",
-]
-
-[[package]]
-name = "hc_zome_peer_status_integrity"
-version = "0.0.1"
-dependencies = [
- "hdi",
  "serde",
 ]
 
