@@ -1,18 +1,17 @@
-import "@webcomponents/scoped-custom-element-registry";
 import { html } from "lit-html";
-import "@holochain-open-dev/profiles/profiles-context";
 import {
   ProfilesZomeMock,
   demoProfiles,
-} from "@holochain-open-dev/profiles/mocks";
-import { PeerStatusZomeMock } from "@holochain-open-dev/peer-status/mocks";
+} from "@holochain-open-dev/profiles/dist/mocks.js";
+import { PeerStatusZomeMock } from "@holochain-open-dev/peer-status/dist/mocks.js";
 import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
 import {
   PeerStatusStore,
   PeerStatusClient,
 } from "@holochain-open-dev/peer-status";
-import "@holochain-open-dev/peer-status/peer-status-context";
-import "@holochain-open-dev/peer-status/avatar-with-status";
+import "@holochain-open-dev/profiles/dist/elements/profiles-context.js";
+import "@holochain-open-dev/peer-status/dist/elements/peer-status-context.js";
+import "@holochain-open-dev/peer-status/dist/elements/avatar-with-status.js";
 
 const profiles = demoProfiles();
 const profilesStore = new ProfilesStore(

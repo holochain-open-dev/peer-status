@@ -20,40 +20,7 @@ Careful! If you are using NPM workspaces (which is the case for the apps generat
 npm install @holochain-open-dev/peer-status -w ui
 ```
 
-2. [Choose which elements you need](?path=/docs/frontend-elements-peer-status--docs) and import them:
-
-**If you are developing a web-app SPA** (and not a library of elements):
-
-```js
-import "@holochain-open-dev/peer-status/peer-status";
-import "@holochain-open-dev/peerStatus/list-agents-by-status";
-```
-
-This will define all the elements from this module in the global `CustomElementsRegistry`. You can read more about Custom Elements [here](https://developers.google.com/web/fundamentals/web-components/customelements).
-
-OR
-
-**If you are using the `@open-wc/scoped-elements`** pattern (maybe because you are developing a library rather than a full SPA), you can import the elements' classes directly from the `@holochain-open-dev/peer-status` package instead of defining them globally:
-
-```js
-import { LitElement, html } from "lit";
-import { ScopedElementsMixin } from "@open-wc/scoped-elements";
-import { PeerStatus } from "@holochain-open-dev/peer-status";
-
-export class PeerStatusDemo extends ScopedElementsMixin(LitElement) {
-  render() {
-    return html` <peer-status></peer-status> `;
-  }
-
-  static get scopedElements() {
-    return {
-      "peer-status": PeerStatus,
-    };
-  }
-}
-```
-
-3. If you haven't already, install and set up the [profiles module](https://holochain-open-dev.github.io/profiles).
+2. If you haven't already, install and set up the [profiles module](https://holochain-open-dev.github.io/profiles).
 
 3. Connect to Holochain with the `AppAgentClient`, and create the `PeerStatusStore` with it:
 
@@ -73,15 +40,17 @@ async function setupPeerStatusStore() {
 
 ```js
 // This can be placed in the index.js, at the top level of your web-app.
-import "@holochain-open-dev/peer-status/peer-status-context";
+import "@holochain-open-dev/peer-status/dist/elements/peer-status-context.js";
 ```
 
-And then add the `<peer-status-context>` element in your html:
+And then add the `<peer-status-context>` element in your html, *inside your `<profiles-context>` element*:
 
 ```html
-<peer-status-context>
-  <list-agents-by-status></list-agents-by-status>
-</peer-status-context>
+<profiles-context>
+  <peer-status-context>
+    <list-agents-by-status></list-agents-by-status>
+  </peer-status-context>
+</profiles-context>
 ```
 
 5. Attach the `peerStatusStore` to the `<peer-status-context>` element:
@@ -94,7 +63,7 @@ You need to set the `store` property of it to your already instantiated `PeerSta
 
 ```html
 <!-- React -->
-<peer-status-context store="{peerStatusStore}"><!-- ... --></peer-status-context>
+<peer-status-context store={peerStatusStore}><!-- ... --></peer-status-context>
 
 <!-- Angular -->
 <peer-status-context [store]="peerStatusStore"><!-- ... --></peer-status-context>
@@ -103,10 +72,10 @@ You need to set the `store` property of it to your already instantiated `PeerSta
 <peer-status-context :store="peerStatusStore"><!-- ... --></peer-status-context>
 
 <!-- Svelte -->
-<peer-status-context store="{peerStatusStore}"><!-- ... --></peer-status-context>
+<peer-status-context store={peerStatusStore}><!-- ... --></peer-status-context>
 
 <!-- Lit -->
-<peer-status-context .store="${peerStatusStore}"><!-- ... --></peer-status-context>
+<peer-status-context .store=${peerStatusStore}><!-- ... --></peer-status-context>
 ```
 
 OR
@@ -120,18 +89,35 @@ contextElement.store = store;
 
 > You can read more about the context pattern [here](https://holochain-open-dev.github.io/reusable-modules/frontend/using/#context).
 
-6. Add the Material Icons font in your `<head>` tag:
+2. [Choose which elements you need](?path=/docs/frontend-elements-peer-status--docs) and import them:
 
-```html
-<head>
-  ...
-  <link
-    href="https://fonts.googleapis.com/css?family=Material+Icons&display=block"
-    rel="stylesheet"
-  />
-</head>
+**If you are developing a web-app SPA** (and not a library of elements):
+
+```js
+import "@holochain-open-dev/peer-status/dist/elements/peer-status.js";
+import "@holochain-open-dev/peer-status/dist/elements/list-agents-by-status.js";
 ```
 
-You can see a full working example of the UI working in [here](https://github.com/holochain-open-dev/peer-status/blob/main/ui/demo/index.html).
+This will define all the elements from this module in the global `CustomElementsRegistry`. You can read more about Custom Elements [here](https://developers.google.com/web/fundamentals/web-components/customelements).
+
+6. Add your preferred shoelace theme in your `<head>` tag:
+
+```html
+  <head>
+    <link rel="stylesheet" href="path/to/shoelace/dist/themes/light.css" />
+  </head>
+```
+
+or in JS:
+
+```js
+import '@shoelace-style/shoelace/dist/themes/light.css';
+```
+
+You can read more about how to initialize the shoelace theme [here](https://shoelace.style/getting-started/themes?id=activating-themes).
 
 That's it! You can spend some time now to take a look at [which elements are available for you to reuse](?path=/docs/frontend-elements-create-profile--docs).
+
+# Demo
+
+You can see a full working example of the UI working in [here](https://github.com/holochain-open-dev/profiles/blob/main/ui/demo/index.html).

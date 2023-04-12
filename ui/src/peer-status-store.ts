@@ -1,7 +1,7 @@
 import { derived, readable } from "@holochain-open-dev/stores";
 import { LazyHoloHashMap, mapLazyValues } from "@holochain-open-dev/utils";
 import { AgentPubKey } from "@holochain/client";
-import merge from "lodash-es/merge.js";
+
 import { defaultConfig, PeerStatusConfig } from "./config.js";
 import { PeerStatusClient } from "./peer-status-client.js";
 
@@ -30,7 +30,7 @@ export class PeerStatusStore {
     protected client: PeerStatusClient,
     config: Partial<PeerStatusConfig> = {}
   ) {
-    this.config = merge(defaultConfig, config);
+    this.config = { ...defaultConfig, ...config };
   }
 
   agentsLastSeen = new LazyHoloHashMap((agent: AgentPubKey) =>
@@ -39,7 +39,7 @@ export class PeerStatusStore {
         () => this.client.ping([agent]),
         this.config.pingIntervalMs
       );
-      const unsubscribe = this.client.on("signal", (peerStatusSignal) => {
+      const unsubscribe = this.client.onSignal((peerStatusSignal) => {
         if (
           peerStatusSignal.type === "Pong" &&
           peerStatusSignal.from_agent.toString() === agent.toString()

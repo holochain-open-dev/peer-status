@@ -1,27 +1,28 @@
-import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { css, html, LitElement } from "lit";
 import {
-  AgentAvatar,
   Profile,
-  ProfileListItemSkeleton,
   ProfilesStore,
   profilesStoreContext,
 } from "@holochain-open-dev/profiles";
 import { derived, joinMap, StoreSubscriber } from "@holochain-open-dev/stores";
-import { MdList, MdListItem } from "@scoped-elements/material-web";
 import { AgentPubKey } from "@holochain/client";
-import { DisplayError, sharedStyles } from "@holochain-open-dev/elements";
+import { sharedStyles } from "@holochain-open-dev/elements";
 import { consume } from "@lit-labs/context";
-import { property } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 import { mapValues, pickBy, slice } from "@holochain-open-dev/utils";
 import { localized, msg } from "@lit/localize";
 
-import { PeerStatusStore, Status } from "../peer-status-store";
-import { peerStatusStoreContext } from "../context";
-import { AvatarWithStatus } from "./avatar-with-status";
+import "@holochain-open-dev/profiles/dist/elements/agent-avatar.js";
+import "@holochain-open-dev/profiles/dist/elements/profile-list-item-skeleton.js";
+import "@holochain-open-dev/elements/dist/elements/display-error.js";
+
+import { PeerStatusStore, Status } from "../peer-status-store.js";
+import { peerStatusStoreContext } from "../context.js";
+import "./avatar-with-status.js";
 
 @localized()
-export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
+@customElement("list-agents-by-status")
+export class ListAgentsByStatus extends LitElement {
   /** Public properties */
 
   /**
@@ -96,19 +97,22 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
       >`;
 
     return html`
-      <md-list style="flex: 1;">
+      <div class="column" style="flex: 1;">
         ${agentPubKeys.map(
-          (agentPubKey) => html` <md-list-item
-            disabled
-            .headline=${profiles.get(agentPubKey)?.nickname}
+          (agentPubKey) => html` <div
+            class="row"
+            style="align-items: center; margin-top: 8px; margin-bottom: 8px"
           >
-            <avatar-with-status
+            <agent-avatar
               slot="start"
               .agentPubKey=${agentPubKey}
-            ></avatar-with-status>
-          </md-list-item>`
+            ></agent-avatar>
+            <span style="margin-left: 8px"
+              >${profiles.get(agentPubKey)?.nickname}</span
+            >
+          </div>`
         )}
-      </md-list>
+      </div>
     `;
   }
   renderOfflineAgents(
@@ -123,19 +127,22 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
       >`;
 
     return html`
-      <md-list style="flex: 1; opacity: 0.5;">
+      <div class="column" style="flex: 1; opacity: 0.5;">
         ${agentPubKeys.map(
-          (agentPubKey) => html` <md-list-item
-            disabled
-            .headline=${profiles.get(agentPubKey)?.nickname}
+          (agentPubKey) => html` <div
+            class="row"
+            style="align-items: center; margin-top: 8px; margin-bottom: 8px"
           >
             <agent-avatar
               slot="start"
               .agentPubKey=${agentPubKey}
             ></agent-avatar>
-          </md-list-item>`
+            <span style="margin-left: 8px"
+              >${profiles.get(agentPubKey)?.nickname}</span
+            >
+          </div>`
         )}
-      </md-list>
+      </div>
     `;
   }
 
@@ -164,6 +171,11 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
             this._profiles.value.value,
             this._onlineAgents.value
           )}
+          <span class="title" style="margin-top: 8px;"
+            >${msg("Offline")}${this._offlineAgents.value !== undefined
+              ? ` - ${this._offlineAgents.value.length}`
+              : ""}</span
+          >
           ${this.renderOfflineAgents(
             this._profiles.value.value,
             this._offlineAgents.value
@@ -194,18 +206,4 @@ export class ListAgentsByStatus extends ScopedElementsMixin(LitElement) {
       }
     `,
   ];
-
-  /**
-   * @internal
-   */
-  static get scopedElements() {
-    return {
-      "avatar-with-status": AvatarWithStatus,
-      "agent-avatar": AgentAvatar,
-      "display-error": DisplayError,
-      "profile-list-item-skeleton": ProfileListItemSkeleton,
-      "md-list": MdList,
-      "md-list-item": MdListItem,
-    };
-  }
 }

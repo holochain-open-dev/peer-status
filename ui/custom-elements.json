@@ -56,7 +56,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "\"./context\""
+            "package": "\"./context.js\""
           }
         },
         {
@@ -64,7 +64,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "\"./elements/peer-status\""
+            "package": "\"./peer-status-client.js\""
           }
         },
         {
@@ -72,7 +72,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "\"./elements/peer-status-context\""
+            "package": "\"./peer-status-store.js\""
           }
         },
         {
@@ -80,39 +80,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "\"./elements/avatar-with-status\""
-          }
-        },
-        {
-          "kind": "js",
-          "name": "*",
-          "declaration": {
-            "name": "*",
-            "package": "\"./elements/list-agents-by-status\""
-          }
-        },
-        {
-          "kind": "js",
-          "name": "*",
-          "declaration": {
-            "name": "*",
-            "package": "\"./peer-status-client\""
-          }
-        },
-        {
-          "kind": "js",
-          "name": "*",
-          "declaration": {
-            "name": "*",
-            "package": "\"./peer-status-store\""
-          }
-        },
-        {
-          "kind": "js",
-          "name": "*",
-          "declaration": {
-            "name": "*",
-            "package": "\"./config\""
+            "package": "\"./config.js\""
           }
         }
       ]
@@ -167,29 +135,6 @@
           "members": [
             {
               "kind": "method",
-              "name": "on",
-              "return": {
-                "type": {
-                  "text": "UnsubscribeFunction"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "eventName",
-                  "type": {
-                    "text": "Name | readonly Name[]"
-                  }
-                },
-                {
-                  "name": "listener",
-                  "type": {
-                    "text": "(eventData: PeerStatusEvents[Name]) => void | Promise<void>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
               "name": "ping",
               "return": {
                 "type": {
@@ -205,27 +150,12 @@
                 }
               ],
               "description": "Ping all given agents, expecting for their pong later"
-            },
-            {
-              "kind": "method",
-              "name": "callZome",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "fn_name",
-                  "type": {
-                    "text": "string"
-                  }
-                },
-                {
-                  "name": "payload",
-                  "type": {
-                    "text": "any"
-                  }
-                }
-              ]
             }
-          ]
+          ],
+          "superclass": {
+            "name": "ZomeClient",
+            "package": "@holochain-open-dev/utils"
+          }
         }
       ],
       "exports": [
@@ -253,12 +183,13 @@
               "name": "config",
               "type": {
                 "text": "PeerStatusConfig"
-              }
+              },
+              "default": "{ ...defaultConfig, ...config }"
             },
             {
               "kind": "field",
               "name": "agentsLastSeen",
-              "default": "new LazyHoloHashMap((agent: AgentPubKey) =>\n    readable<number | undefined>(undefined, (set) => {\n      const interval = setInterval(\n        () => this.client.ping([agent]),\n        this.config.pingIntervalMs\n      );\n      const unsubscribe = this.client.on(\"signal\", (peerStatusSignal) => {\n        if (\n          peerStatusSignal.type === \"Pong\" &&\n          peerStatusSignal.from_agent.toString() === agent.toString()\n        ) {\n          set(Date.now());\n        }\n      });\n\n      return () => {\n        clearInterval(interval);\n        unsubscribe();\n      };\n    })\n  )"
+              "default": "new LazyHoloHashMap((agent: AgentPubKey) =>\n    readable<number | undefined>(undefined, (set) => {\n      const interval = setInterval(\n        () => this.client.ping([agent]),\n        this.config.pingIntervalMs\n      );\n      const unsubscribe = this.client.onSignal((peerStatusSignal) => {\n        if (\n          peerStatusSignal.type === \"Pong\" &&\n          peerStatusSignal.from_agent.toString() === agent.toString()\n        ) {\n          set(Date.now());\n        }\n      });\n\n      return () => {\n        clearInterval(interval);\n        unsubscribe();\n      };\n    })\n  )"
             },
             {
               "kind": "field",
@@ -388,297 +319,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/definitions/avatar-with-status.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "AWS",
-          "superclass": {
-            "name": "AvatarWithStatus",
-            "module": "/src/elements/avatar-with-status"
-          },
-          "tagName": "avatar-with-status",
-          "customElement": true,
-          "attributes": [
-            {
-              "name": "agentPubKey",
-              "type": {
-                "text": "AgentPubKey"
-              },
-              "description": "REQUIRED. The public key identifying the agent whose presence is going to be shown.",
-              "fieldName": "agentPubKey",
-              "inheritedFrom": {
-                "name": "AvatarWithStatus",
-                "module": "src/elements/avatar-with-status.ts"
-              }
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "agentPubKey",
-              "type": {
-                "text": "AgentPubKey"
-              },
-              "description": "REQUIRED. The public key identifying the agent whose presence is going to be shown.",
-              "attribute": "agentPubKey",
-              "inheritedFrom": {
-                "name": "AvatarWithStatus",
-                "module": "src/elements/avatar-with-status.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "scopedElements",
-              "static": true,
-              "inheritedFrom": {
-                "name": "AvatarWithStatus",
-                "module": "src/elements/avatar-with-status.ts"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "avatar-with-status",
-          "declaration": {
-            "name": "AWS",
-            "module": "src/definitions/avatar-with-status.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/definitions/list-agents-by-status.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "LABS",
-          "superclass": {
-            "name": "ListAgentsByStatus",
-            "module": "/src/elements/list-agents-by-status"
-          },
-          "tagName": "list-agents-by-status",
-          "customElement": true,
-          "attributes": [
-            {
-              "name": "agents",
-              "type": {
-                "text": "AgentPubKey[]"
-              },
-              "description": "REQUIRED. The public keys identifying the agents whose presence is going to be shown.",
-              "fieldName": "agents",
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "agents",
-              "type": {
-                "text": "AgentPubKey[]"
-              },
-              "description": "REQUIRED. The public keys identifying the agents whose presence is going to be shown.",
-              "attribute": "agents",
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "renderOnlineAgents",
-              "parameters": [
-                {
-                  "name": "profiles",
-                  "type": {
-                    "text": "ReadonlyMap<AgentPubKey, Profile | undefined>"
-                  }
-                },
-                {
-                  "name": "agentPubKeys",
-                  "type": {
-                    "text": "AgentPubKey[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "renderOfflineAgents",
-              "parameters": [
-                {
-                  "name": "profiles",
-                  "type": {
-                    "text": "ReadonlyMap<AgentPubKey, Profile | undefined>"
-                  }
-                },
-                {
-                  "name": "agentPubKeys",
-                  "type": {
-                    "text": "AgentPubKey[]"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "renderHeading",
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "renderAgents",
-              "inheritedFrom": {
-                "name": "ListAgentsByStatus",
-                "module": "src/elements/list-agents-by-status.ts"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "list-agents-by-status",
-          "declaration": {
-            "name": "LABS",
-            "module": "src/definitions/list-agents-by-status.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/definitions/peer-status-context.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "PSC",
-          "superclass": {
-            "name": "PeerStatusContext",
-            "module": "/src/elements/peer-status-context"
-          },
-          "tagName": "peer-status-context",
-          "customElement": true,
-          "attributes": [
-            {
-              "name": "store",
-              "type": {
-                "text": "PeerStatusStore"
-              },
-              "fieldName": "store",
-              "inheritedFrom": {
-                "name": "PeerStatusContext",
-                "module": "src/elements/peer-status-context.ts"
-              }
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "PeerStatusStore"
-              },
-              "attribute": "store",
-              "inheritedFrom": {
-                "name": "PeerStatusContext",
-                "module": "src/elements/peer-status-context.ts"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "peer-status-context",
-          "declaration": {
-            "name": "PSC",
-            "module": "src/definitions/peer-status-context.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/definitions/peer-status.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "PS",
-          "superclass": {
-            "name": "PeerStatus",
-            "module": "/src/elements/peer-status"
-          },
-          "tagName": "peer-status",
-          "customElement": true,
-          "attributes": [
-            {
-              "name": "agentPubKey",
-              "type": {
-                "text": "AgentPubKey"
-              },
-              "description": "REQUIRED. The public key identifying the agent whose presence is going to be shown.",
-              "fieldName": "agentPubKey",
-              "inheritedFrom": {
-                "name": "PeerStatus",
-                "module": "src/elements/peer-status.ts"
-              }
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "agentPubKey",
-              "type": {
-                "text": "AgentPubKey"
-              },
-              "description": "REQUIRED. The public key identifying the agent whose presence is going to be shown.",
-              "attribute": "agentPubKey",
-              "inheritedFrom": {
-                "name": "PeerStatus",
-                "module": "src/elements/peer-status.ts"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "peer-status",
-          "declaration": {
-            "name": "PS",
-            "module": "src/definitions/peer-status.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/elements/avatar-with-status.ts",
       "declarations": [
         {
@@ -694,11 +334,6 @@
               },
               "description": "REQUIRED. The public key identifying the agent whose presence is going to be shown.",
               "attribute": "agentPubKey"
-            },
-            {
-              "kind": "field",
-              "name": "scopedElements",
-              "static": true
             }
           ],
           "attributes": [
@@ -711,16 +346,11 @@
               "fieldName": "agentPubKey"
             }
           ],
-          "mixins": [
-            {
-              "name": "ScopedElementsMixin",
-              "package": "@open-wc/scoped-elements"
-            }
-          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
           },
+          "tagName": "avatar-with-status",
           "customElement": true
         }
       ],
@@ -728,6 +358,14 @@
         {
           "kind": "js",
           "name": "AvatarWithStatus",
+          "declaration": {
+            "name": "AvatarWithStatus",
+            "module": "src/elements/avatar-with-status.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "avatar-with-status",
           "declaration": {
             "name": "AvatarWithStatus",
             "module": "src/elements/avatar-with-status.ts"
@@ -808,16 +446,11 @@
               "fieldName": "agents"
             }
           ],
-          "mixins": [
-            {
-              "name": "ScopedElementsMixin",
-              "package": "@open-wc/scoped-elements"
-            }
-          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
           },
+          "tagName": "list-agents-by-status",
           "customElement": true
         }
       ],
@@ -825,6 +458,14 @@
         {
           "kind": "js",
           "name": "ListAgentsByStatus",
+          "declaration": {
+            "name": "ListAgentsByStatus",
+            "module": "src/elements/list-agents-by-status.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "list-agents-by-status",
           "declaration": {
             "name": "ListAgentsByStatus",
             "module": "src/elements/list-agents-by-status.ts"
@@ -863,6 +504,7 @@
             "name": "LitElement",
             "package": "lit"
           },
+          "tagName": "peer-status-context",
           "customElement": true
         }
       ],
@@ -870,6 +512,14 @@
         {
           "kind": "js",
           "name": "PeerStatusContext",
+          "declaration": {
+            "name": "PeerStatusContext",
+            "module": "src/elements/peer-status-context.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "peer-status-context",
           "declaration": {
             "name": "PeerStatusContext",
             "module": "src/elements/peer-status-context.ts"
@@ -906,16 +556,11 @@
               "fieldName": "agentPubKey"
             }
           ],
-          "mixins": [
-            {
-              "name": "ScopedElementsMixin",
-              "package": "@open-wc/scoped-elements"
-            }
-          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
           },
+          "tagName": "peer-status",
           "customElement": true
         }
       ],
@@ -923,6 +568,14 @@
         {
           "kind": "js",
           "name": "PeerStatus",
+          "declaration": {
+            "name": "PeerStatus",
+            "module": "src/elements/peer-status.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "peer-status",
           "declaration": {
             "name": "PeerStatus",
             "module": "src/elements/peer-status.ts"

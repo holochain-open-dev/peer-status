@@ -1,15 +1,15 @@
 import { consume } from "@lit-labs/context";
-import { ScopedElementsMixin } from "@open-wc/scoped-elements";
-import { StoreSubscriber } from "lit-svelte-stores";
+import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { AgentPubKey } from "@holochain/client";
 import { css, html, LitElement } from "lit";
 import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
-import { property } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 
-import { peerStatusStoreContext } from "../context";
-import { PeerStatusStore } from "../peer-status-store";
+import { peerStatusStoreContext } from "../context.js";
+import { PeerStatusStore } from "../peer-status-store.js";
 
-export class PeerStatus extends ScopedElementsMixin(LitElement) {
+@customElement("peer-status")
+export class PeerStatus extends LitElement {
   /** Public properties */
 
   /**

@@ -1,13 +1,13 @@
-import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { css, html, LitElement } from "lit";
-import { AgentAvatar } from "@holochain-open-dev/profiles";
 import { AgentPubKey } from "@holochain/client";
 import { sharedStyles, hashProperty } from "@holochain-open-dev/elements";
+import { customElement, property } from "lit/decorators.js";
 
-import { property } from "lit/decorators.js";
-import { PeerStatus } from "./peer-status";
+import "@holochain-open-dev/profiles/dist/elements/agent-avatar.js";
+import "./peer-status.js";
 
-export class AvatarWithStatus extends ScopedElementsMixin(LitElement) {
+@customElement("avatar-with-status")
+export class AvatarWithStatus extends LitElement {
   /** Public properties */
 
   /**
@@ -30,11 +30,4 @@ export class AvatarWithStatus extends ScopedElementsMixin(LitElement) {
       }
     `,
   ];
-
-  static get scopedElements() {
-    return {
-      "agent-avatar": AgentAvatar,
-      "peer-status": PeerStatus,
-    };
-  }
 }
