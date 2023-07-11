@@ -5,14 +5,11 @@ opt-level = "z"
 opt-level = "z"
 
 [workspace]
-members = [
-  "crates/coordinator_zomes/*",
-  "crates/integrity_zomes/*",
-]
+members = ["crates/coordinator_zomes/*", "crates/integrity_zomes/*"]
 
 
 [workspace.dependencies]
-hdi = "0.2.0"
-hdk = "0.1.0"
+hdi = "0.3"
+hdk = "0.2"
 serde = "1"
-holochain = "0.1.0"
+holochain = "0.3.0-beta-dev.8"

@@ -7,7 +7,7 @@ homepage = "https://holochain-open-dev.github.io/peer-status"
 license = "MIT"
 name = "hc_zome_peer_status_coordinator"
 repository = "https://github.com/holochain-open-dev/peer-status"
-version = "0.1.0"
+version = "0.2.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
