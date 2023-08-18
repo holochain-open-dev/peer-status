@@ -29,7 +29,8 @@ export class PeerStatus extends LitElement {
    * @internal
    */
   _status = new StoreSubscriber(this, () =>
-    this.store.agentsStatus.get(this.agentPubKey)
+    this.store.agentsStatus.get(this.agentPubKey),
+    () => [this.store],
   );
 
   render() {

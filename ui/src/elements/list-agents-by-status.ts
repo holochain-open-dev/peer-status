@@ -51,7 +51,8 @@ export class ListAgentsByStatus extends LitElement {
    * @internal
    */
   _profiles = new StoreSubscriber(this, () =>
-    this.profilesStore.agentsProfiles(this.agents)
+    this.profilesStore.agentsProfiles(this.agents),
+    () => [this.profilesStore],
   );
 
   /**
@@ -67,7 +68,8 @@ export class ListAgentsByStatus extends LitElement {
             (status, _key) => status === Status.Online
           ).keys()
         )
-    )
+    ),
+    () => [this.store],
   );
   /**
    * @internal
@@ -82,7 +84,8 @@ export class ListAgentsByStatus extends LitElement {
             (status, _key) => status === Status.Offline
           ).keys()
         )
-    )
+    ),
+    () => [this.store],
   );
 
   renderOnlineAgents(
