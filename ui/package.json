@@ -1,6 +1,6 @@
 {
   "name": "@holochain-open-dev/peer-status",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Frontend module for the Holochain hc_zome_peer_status zome",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",
@@ -19,14 +19,14 @@
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@holochain-open-dev/elements": "^0.7.0",
-    "@holochain-open-dev/profiles": "^0.16.0",
-    "@holochain-open-dev/stores": "^0.6.0",
-    "@holochain-open-dev/utils": "^0.15.0",
+    "@holochain-open-dev/elements": "^0.8.4",
+    "@holochain-open-dev/profiles": "^0.17.3",
+    "@holochain-open-dev/stores": "^0.8.3",
+    "@holochain-open-dev/utils": "^0.16.3",
     "@holochain/client": "^0.16.0",
-    "@lit-labs/context": "^0.2.0",
-    "@lit/localize": "^0.11.4",
-    "lit": "^2.1.1"
+    "@lit/context": "^1.0.1",
+    "@lit/localize": "^0.12.0",
+    "lit": "^3.0.2"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.6.8",

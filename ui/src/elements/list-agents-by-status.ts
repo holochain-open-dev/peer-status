@@ -7,9 +7,9 @@ import {
 import { derived, joinMap, StoreSubscriber } from "@holochain-open-dev/stores";
 import { AgentPubKey } from "@holochain/client";
 import { sharedStyles } from "@holochain-open-dev/elements";
-import { consume } from "@lit-labs/context";
+import { consume } from "@lit/context";
 import { customElement, property } from "lit/decorators.js";
-import { mapValues, pickBy, slice } from "@holochain-open-dev/utils";
+import { EntryRecord, mapValues, pickBy, slice } from "@holochain-open-dev/utils";
 import { localized, msg } from "@lit/localize";
 
 import "@holochain-open-dev/profiles/dist/elements/agent-avatar.js";
@@ -89,7 +89,7 @@ export class ListAgentsByStatus extends LitElement {
   );
 
   renderOnlineAgents(
-    profiles: ReadonlyMap<AgentPubKey, Profile | undefined>,
+    profiles: ReadonlyMap<AgentPubKey, EntryRecord<Profile> | undefined>,
     agentPubKeys: AgentPubKey[]
   ) {
     if (agentPubKeys.length === 0)
@@ -111,7 +111,7 @@ export class ListAgentsByStatus extends LitElement {
               .agentPubKey=${agentPubKey}
             ></agent-avatar>
             <span style="margin-left: 8px"
-              >${profiles.get(agentPubKey)?.nickname}</span
+              >${profiles.get(agentPubKey)?.entry.nickname}</span
             >
           </div>`
         )}
@@ -119,7 +119,7 @@ export class ListAgentsByStatus extends LitElement {
     `;
   }
   renderOfflineAgents(
-    profiles: ReadonlyMap<AgentPubKey, Profile | undefined>,
+    profiles: ReadonlyMap<AgentPubKey, EntryRecord<Profile> | undefined>,
     agentPubKeys: AgentPubKey[]
   ) {
     if (agentPubKeys.length === 0)
@@ -141,7 +141,7 @@ export class ListAgentsByStatus extends LitElement {
               .agentPubKey=${agentPubKey}
             ></agent-avatar>
             <span style="margin-left: 8px"
-              >${profiles.get(agentPubKey)?.nickname}</span
+              >${profiles.get(agentPubKey)?.entry.nickname}</span
             >
           </div>`
         )}

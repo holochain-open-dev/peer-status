@@ -1,4 +1,4 @@
-import { createContext } from '@lit-labs/context';
+import { createContext } from '@lit/context';
 import { PeerStatusStore } from './peer-status-store';
 
 export const peerStatusStoreContext = createContext<PeerStatusStore>(
