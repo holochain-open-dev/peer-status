@@ -1,6 +1,6 @@
 {
   "name": "@holochain-open-dev/peer-status",
-  "version": "0.10.0",
+  "version": "0.10.1-debug.9",
   "description": "Frontend module for the Holochain hc_zome_peer_status zome",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",

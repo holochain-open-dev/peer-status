@@ -51,13 +51,11 @@ export class PeerStatus extends LitElement {
 
       .outer,
       .online,
-      .idle,
       .offline {
         border-radius: 50%;
       }
 
-      .online,
-      .idle {
+      .online {
         top: 2px;
         left: 2px;
         position: absolute;
@@ -67,10 +65,6 @@ export class PeerStatus extends LitElement {
 
       .online {
         background-color: #00ef00;
-      }
-
-      .idle {
-        background-color: #df8600;
       }
 
       .offline {

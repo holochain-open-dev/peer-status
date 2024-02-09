@@ -24,8 +24,7 @@ The config for the `PeerStatusStore` has these options:
 ```ts
 export interface PeerStatusConfig {
   pingIntervalMs: number;
-  onlineThresholdMs: number; // The amount of milliseconds after which the agent is not considered to be online anymore, and is idle
-  idleThresholdMs: number;   // The amount of milliseconds after which the agent is not considered to be idle anymore, and is offline
+  onlineThresholdMs: number; // The amount of milliseconds after which the agent is not considered to be offline
 }
 ```
 

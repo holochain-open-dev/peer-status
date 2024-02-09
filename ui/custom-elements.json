@@ -12,7 +12,7 @@
           "type": {
             "text": "PeerStatusConfig"
           },
-          "default": "{\n  pingIntervalMs: 2000,\n  onlineThresholdMs: 5000,\n  idleThresholdMs: 20000,\n}"
+          "default": "{\n  pingIntervalMs: 2000,\n  onlineThresholdMs: 5000,\n}"
         }
       ],
       "exports": [
