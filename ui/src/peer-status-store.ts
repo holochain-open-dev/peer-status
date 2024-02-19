@@ -1,5 +1,5 @@
-import { derived, readable } from "@holochain-open-dev/stores";
-import { LazyHoloHashMap, mapLazyValues } from "@holochain-open-dev/utils";
+import { readable } from "@holochain-open-dev/stores";
+import { LazyHoloHashMap } from "@holochain-open-dev/utils";
 import { AgentPubKey } from "@holochain/client";
 
 import { defaultConfig, PeerStatusConfig } from "./config.js";
@@ -7,20 +7,7 @@ import { PeerStatusClient } from "./peer-status-client.js";
 
 export enum Status {
   Online = "online",
-  Idle = "idle",
   Offline = "offline",
-}
-
-function lastSeenToStatus(
-  lastSeen: number | undefined,
-  config: PeerStatusConfig
-): Status {
-  if (lastSeen === undefined) return Status.Offline;
-  const now = Date.now();
-
-  if (now - lastSeen < config.onlineThresholdMs) return Status.Online;
-  if (now - lastSeen < config.idleThresholdMs) return Status.Idle;
-  return Status.Offline;
 }
 
 export class PeerStatusStore {
@@ -33,10 +20,19 @@ export class PeerStatusStore {
     this.config = { ...defaultConfig, ...config };
   }
 
-  agentsLastSeen = new LazyHoloHashMap((agent: AgentPubKey) =>
-    readable<number | undefined>(undefined, (set) => {
+  agentsStatus = new LazyHoloHashMap((agent: AgentPubKey) =>
+    readable<Status>(Status.Offline, (set) => {
+      let lastPong: number | undefined = undefined;
       const interval = setInterval(
-        () => this.client.ping([agent]),
+        () => {
+          this.client.ping([agent]);
+          setTimeout(() => {
+            const now = Date.now();
+            if (!lastPong || now - lastPong > this.config.onlineThresholdMs) {
+              set(Status.Offline);
+            };
+          }, this.config.onlineThresholdMs);
+        },
         this.config.pingIntervalMs
       );
       const unsubscribe = this.client.onSignal((peerStatusSignal) => {
@@ -44,18 +40,24 @@ export class PeerStatusStore {
           peerStatusSignal.type === "Pong" &&
           peerStatusSignal.from_agent.toString() === agent.toString()
         ) {
-          set(Date.now());
+          set(Status.Online);
+          lastPong = Date.now();
         }
       });
+
+      // ping immediately without waiting for first interval
+      this.client.ping([agent]);
+      setTimeout(() => {
+        const now = Date.now();
+        if (!lastPong || now - lastPong > this.config.onlineThresholdMs) {
+          set(Status.Offline);
+        };
+      }, this.config.onlineThresholdMs);
 
       return () => {
         clearInterval(interval);
         unsubscribe();
       };
     })
-  );
-
-  agentsStatus = mapLazyValues(this.agentsLastSeen, (r) =>
-    derived(r, (lastSeen) => lastSeenToStatus(lastSeen, this.config))
   );
 }

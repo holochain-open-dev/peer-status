@@ -1,4 +1,4 @@
-import { consume } from "@lit-labs/context";
+import { consume } from "@lit/context";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { AgentPubKey } from "@holochain/client";
 import { css, html, LitElement } from "lit";
@@ -51,13 +51,11 @@ export class PeerStatus extends LitElement {
 
       .outer,
       .online,
-      .idle,
       .offline {
         border-radius: 50%;
       }
 
-      .online,
-      .idle {
+      .online {
         top: 2px;
         left: 2px;
         position: absolute;
@@ -67,10 +65,6 @@ export class PeerStatus extends LitElement {
 
       .online {
         background-color: #00ef00;
-      }
-
-      .idle {
-        background-color: #df8600;
       }
 
       .offline {
