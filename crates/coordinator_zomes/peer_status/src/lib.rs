@@ -13,8 +13,8 @@ pub enum SignalPayload {
 }
 
 // AliceUI->|ping([bob_pubkey])|AliceNode
-// AliceNode->|remote_signal(bob_key, ping)|BobNode
-// BobNode->|remote_signal(alice_key, pong|)AliceNode
+// AliceNode->|send_remote_signal(bob_key, ping)|BobNode
+// BobNode->|send_remote_signal(alice_key, pong|)AliceNode
 // AliceNode->|emit_signal(bob_pong)|AliceUI
 
 #[hdk_extern]
@@ -42,7 +42,7 @@ pub fn ping(agents_pub_keys: Vec<AgentPubKey>) -> ExternResult<()> {
     let encoded_signal = ExternIO::encode(signal_payload)
         .map_err(|err| wasm_error!(WasmErrorInner::Guest(err.into())))?;
 
-    remote_signal(encoded_signal, agents_pub_keys)
+    send_remote_signal(encoded_signal, agents_pub_keys)
 }
 
 #[hdk_extern]
@@ -65,5 +65,5 @@ fn pong(from_agent: AgentPubKey) -> ExternResult<()> {
     let encoded_signal = ExternIO::encode(signal_payload)
         .map_err(|err| wasm_error!(WasmErrorInner::Guest(err.into())))?;
 
-    remote_signal(encoded_signal, vec![from_agent])
+    send_remote_signal(encoded_signal, vec![from_agent])
 }

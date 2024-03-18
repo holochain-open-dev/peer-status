@@ -9,5 +9,5 @@ name = "hc_zome_profiles_coordinator"
 
 [dependencies]
 
-hc_zome_profiles_integrity = { git = "https://github.com/holochain-open-dev/profiles", rev = "b4f0c579a1b0bc0a3a60c0e8c9fd5d0c39d42544" }
-hc_zome_profiles_coordinator = { git = "https://github.com/holochain-open-dev/profiles", rev = "b4f0c579a1b0bc0a3a60c0e8c9fd5d0c39d42544" }
+hc_zome_profiles_integrity = { git = "https://github.com/holochain-open-dev/profiles", rev = "540d63d147db6f274d507938c3ea8655560a0bf9" }
+hc_zome_profiles_coordinator = { git = "https://github.com/holochain-open-dev/profiles", rev = "540d63d147db6f274d507938c3ea8655560a0bf9" }
