@@ -52,7 +52,7 @@
         }
 
         async firstUpdated() {
-          const client = await AppAgentWebsocket.connect("", "status-test");
+          const client = await AppAgentWebsocket.connect("status-test");
 
           const profilesStore = new ProfilesStore(
             new ProfilesClient(client, "status")

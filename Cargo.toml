@@ -9,7 +9,7 @@ members = ["crates/coordinator_zomes/*", "crates/integrity_zomes/*"]
 
 
 [workspace.dependencies]
-hdi = "0.4.0-beta-dev.30"
-hdk = "0.3.0-beta-dev.34"
+hdi = "0.4.0-beta-dev.29"
+hdk = "0.3.0-beta-dev.33"
 serde = "1"
-holochain = "0.3.0-beta-dev.40"
+holochain = "0.3.0-beta-dev.39"
